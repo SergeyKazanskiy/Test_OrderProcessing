@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Module · API Tester</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0d0f14;
+    --bg2:       #13161e;
+    --bg3:       #1a1e2a;
+    --bg4:       #212636;
+    --border:    #2a3045;
+    --border2:   #3a4460;
+    --text:      #c8d0e8;
+    --text2:     #7888aa;
+    --text3:     #4a5570;
+    --accent:    #4f9eff;
+    --accent2:   #7bb8ff;
+    --green:     #3ddc84;
+    --green2:    #1a5c38;
+    --red:       #ff5f5f;
+    --red2:      #5c1a1a;
+    --yellow:    #ffc642;
+    --yellow2:   #5c3e00;
+    --purple:    #b48eff;
+    --cyan:      #4eecd8;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-ui:   'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text2);
+    margin-left: 4px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .base-url-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+  }
+
+  .base-url-wrap label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .base-url-wrap input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--cyan);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    width: 200px;
+  }
+
+  .locale-select {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 420px;
+    height: calc(100vh - 56px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 16px 0;
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    padding: 8px 16px 4px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { background: var(--bg3); }
+
+  .nav-item.active {
+    background: var(--bg3);
+    border-left-color: var(--accent);
+    color: var(--accent2);
+  }
+
+  .method-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    min-width: 36px;
+    text-align: center;
+    letter-spacing: 0.04em;
+  }
+
+  .method-post { background: rgba(79,158,255,0.15); color: var(--accent); }
+  .method-get  { background: rgba(61,220,132,0.15); color: var(--green); }
+
+  .nav-name { font-size: 12px; color: inherit; }
+
+  /* ── MAIN PANEL ── */
+  .main {
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Panels */
+  .panel {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .panel.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-method {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 5px;
+    margin-top: 2px;
+  }
+
+  .panel-info h2 {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  .panel-info p {
+    color: var(--text2);
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  .endpoint-path {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--cyan);
+    margin-top: 8px;
+  }
+
+  /* Form */
+  .form-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .form-section-header {
+    padding: 12px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    font-family: var(--font-ui);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .field label {
+    font-size: 11px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .field label .req {
+    color: var(--red);
+    font-size: 10px;
+  }
+
+  .field label .type {
+    color: var(--text3);
+    font-size: 10px;
+    font-style: italic;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  textarea,
+  select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,158,255,0.08);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--text3); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* Items builder */
+  .items-builder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .order-item-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 8px;
+    align-items: end;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    animation: fadeIn 0.15s ease;
+  }
+
+  .btn-icon {
+    width: 32px; height: 32px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--bg4);
+    color: var(--text2);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.15s;
+    align-self: flex-end;
+  }
+
+  .btn-icon:hover { background: var(--red2); border-color: var(--red); color: var(--red); }
+
+  .btn-add-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: rgba(79,158,255,0.06);
+    border: 1px dashed var(--border2);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-add-item:hover {
+    background: rgba(79,158,255,0.12);
+    border-color: var(--accent);
+  }
+
+  /* Submit button */
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-submit:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79,158,255,0.3); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-submit .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+  }
+
+  .btn-submit.loading .spinner { display: block; }
+  .btn-submit.loading .btn-label { opacity: 0.7; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RIGHT PANEL (response) ── */
+  .response-panel {
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .response-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg3);
+    flex-shrink: 0;
+  }
+
+  .response-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--text3);
+  }
+
+  .status-ok .status-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-err .status-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+  .status-ok .status-code { color: var(--green); }
+  .status-err .status-code { color: var(--red); }
+
+  /* Tabs */
+  .response-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+
+  .response-tab {
+    padding: 9px 16px;
+    font-size: 11px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    color: var(--text3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .response-tab:hover { color: var(--text); }
+  .response-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .response-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .response-tab-content { display: none; }
+  .response-tab-content.active { display: block; }
+
+  /* JSON viewer */
+  .json-viewer {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .json-key    { color: var(--accent2); }
+  .json-str    { color: var(--green); }
+  .json-num    { color: var(--yellow); }
+  .json-bool   { color: var(--purple); }
+  .json-null   { color: var(--text3); }
+  .json-punct  { color: var(--text2); }
+
+  /* History */
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .history-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .history-item:hover { border-color: var(--border2); background: var(--bg4); }
+
+  .history-method {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+
+  .history-info { flex: 1; min-width: 0; }
+  .history-name { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history-time { font-size: 10px; color: var(--text3); }
+
+  .history-status {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    gap: 12px;
+    color: var(--text3);
+  }
+
+  .empty-state svg { opacity: 0.3; }
+  .empty-state p { font-size: 12px; }
+
+  /* Toast */
+  #toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 999;
+  }
+
+  .toast {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideIn 0.25s ease;
+    max-width: 320px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  .toast-ok  { background: var(--green2); border: 1px solid var(--green); color: var(--green); }
+  .toast-err { background: var(--red2);   border: 1px solid var(--red);   color: var(--red); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* Tip */
+  .field-tip {
+    font-size: 10px;
+    color: var(--text3);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  .copy-btn {
+    padding: 4px 10px;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .time-label {
+    font-size: 10px;
+    color: var(--text3);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⬡</div>
+    Order Module
+    <span class="logo-sub">/ API Tester</span>
+  </div>
+  <div class="header-right">
+    <div class="base-url-wrap">
+      <label>BASE URL</label>
+      <input type="text" id="baseUrl" value="http://127.0.0.1:8000/api/v1">
+    </div>
+    <select class="locale-select" id="localeSelect">
+      <option value="en">🌐 EN</option>
+      <option value="uk">🇺🇦 UK</option>
+      <option value="ru">🇷🇺 RU</option>
+    </select>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Customers</div>
+      <div class="nav-item active" onclick="showPanel('create-customer')">
+        <span class="method-badge method-post">POST</span>
+        <span class="nav-name">Create Customer</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('get-customer')">
+        <span class="method-badge method-get">GET</span>
+        <span class="nav-name">Get Customer</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Products</div>
+      <div class="nav-item" onclick="showPanel('create-product')">
+        <span class="method-badge method-post">POST</span>
+        <span class="nav-name">Create Product</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('get-product')">
+        <span class="method-badge method-get">GET</span>
+        <span class="nav-name">Get Product</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Orders</div>
+      <div class="nav-item" onclick="showPanel('create-order')">
+        <span class="method-badge method-post">POST</span>
+        <span class="nav-name">Create Order</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('get-order')">
+        <span class="method-badge method-get">GET</span>
+        <span class="nav-name">Get Order</span>
+      </div>
+      <div class="nav-item" onclick="showPanel('orders-by-customer')">
+        <span class="method-badge method-get">GET</span>
+        <span class="nav-name">By Customer</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- CREATE CUSTOMER -->
+    <div class="panel active" id="panel-create-customer">
+      <div class="panel-header">
+        <span class="method-badge method-post panel-method" style="font-size:12px;padding:5px 12px;">POST</span>
+        <div class="panel-info">
+          <h2>Create Customer</h2>
+          <p>Register a new customer in the system</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/customers</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 6h4M6 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Request Body
+        </div>
+        <div class="form-body">
+          <div class="field-row">
+            <div class="field">
+              <label>name <span class="req">*</span> <span class="type">string</span></label>
+              <input type="text" id="c-name" placeholder="John Doe">
+            </div>
+            <div class="field">
+              <label>email <span class="req">*</span> <span class="type">EmailStr</span></label>
+              <input type="text" id="c-email" placeholder="john@example.com">
+            </div>
+          </div>
+          <div class="field">
+            <label>phone <span class="type">optional · string</span></label>
+            <input type="text" id="c-phone" placeholder="+380501234567">
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="createCustomer()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- GET CUSTOMER -->
+    <div class="panel" id="panel-get-customer">
+      <div class="panel-header">
+        <span class="method-badge method-get panel-method" style="font-size:12px;padding:5px 12px;">GET</span>
+        <div class="panel-info">
+          <h2>Get Customer</h2>
+          <p>Retrieve a customer by their ID</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/customers/</span><span style="color:var(--yellow)">{id}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Path Parameters
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>customer_id <span class="req">*</span> <span class="type">integer</span></label>
+            <input type="number" id="gc-id" placeholder="1" min="1">
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="getCustomer()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- CREATE PRODUCT -->
+    <div class="panel" id="panel-create-product">
+      <div class="panel-header">
+        <span class="method-badge method-post panel-method" style="font-size:12px;padding:5px 12px;">POST</span>
+        <div class="panel-info">
+          <h2>Create Product</h2>
+          <p>Add a new product to the catalog</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/products</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 6h4M6 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Request Body
+        </div>
+        <div class="form-body">
+          <div class="field-row">
+            <div class="field">
+              <label>name <span class="req">*</span> <span class="type">string</span></label>
+              <input type="text" id="p-name" placeholder="Laptop Pro">
+            </div>
+            <div class="field">
+              <label>sku <span class="req">*</span> <span class="type">string · unique</span></label>
+              <input type="text" id="p-sku" placeholder="LAPTOP-001">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>price <span class="req">*</span> <span class="type">decimal · gt:0</span></label>
+              <input type="text" id="p-price" placeholder="999.99">
+            </div>
+            <div class="field">
+              <label>description <span class="type">optional</span></label>
+              <input type="text" id="p-desc" placeholder="Product description">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="createProduct()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- GET PRODUCT -->
+    <div class="panel" id="panel-get-product">
+      <div class="panel-header">
+        <span class="method-badge method-get panel-method" style="font-size:12px;padding:5px 12px;">GET</span>
+        <div class="panel-info">
+          <h2>Get Product</h2>
+          <p>Retrieve a product by its ID</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/products/</span><span style="color:var(--yellow)">{id}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Path Parameters
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>product_id <span class="req">*</span> <span class="type">integer</span></label>
+            <input type="number" id="gp-id" placeholder="1" min="1">
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="getProduct()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- CREATE ORDER -->
+    <div class="panel" id="panel-create-order">
+      <div class="panel-header">
+        <span class="method-badge method-post panel-method" style="font-size:12px;padding:5px 12px;">POST</span>
+        <div class="panel-info">
+          <h2>Create Order</h2>
+          <p>Place a new order — total is calculated automatically</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/orders</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 6h4M6 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Request Body
+        </div>
+        <div class="form-body">
+          <div class="field-row">
+            <div class="field">
+              <label>customer_id <span class="req">*</span> <span class="type">integer</span></label>
+              <input type="number" id="o-customer" placeholder="1" min="1">
+            </div>
+            <div class="field">
+              <label>notes <span class="type">optional</span></label>
+              <input type="text" id="o-notes" placeholder="Delivery before 18:00">
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="field">
+            <label>items <span class="req">*</span> <span class="type">array · min 1 item</span></label>
+            <div class="items-builder" id="items-builder">
+              <!-- items added here -->
+            </div>
+            <button class="btn-add-item" onclick="addOrderItem()">
+              + Add Item
+            </button>
+            <p class="field-tip">Each item: product_id + quantity. Unit price is snapshotted from the product automatically.</p>
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="createOrder()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- GET ORDER -->
+    <div class="panel" id="panel-get-order">
+      <div class="panel-header">
+        <span class="method-badge method-get panel-method" style="font-size:12px;padding:5px 12px;">GET</span>
+        <div class="panel-info">
+          <h2>Get Order</h2>
+          <p>Retrieve a specific order by ID with all its items</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/orders/</span><span style="color:var(--yellow)">{id}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Path Parameters
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>order_id <span class="req">*</span> <span class="type">integer</span></label>
+            <input type="number" id="go-id" placeholder="1" min="1">
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="getOrder()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+    <!-- ORDERS BY CUSTOMER -->
+    <div class="panel" id="panel-orders-by-customer">
+      <div class="panel-header">
+        <span class="method-badge method-get panel-method" style="font-size:12px;padding:5px 12px;">GET</span>
+        <div class="panel-info">
+          <h2>Orders by Customer</h2>
+          <p>List all orders placed by a specific customer</p>
+          <div class="endpoint-path">
+            <span style="color:var(--text3)">/api/v1</span><span>/orders/by-customer/</span><span style="color:var(--yellow)">{id}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-header">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 5v4M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Path Parameters
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>customer_id <span class="req">*</span> <span class="type">integer</span></label>
+            <input type="number" id="obc-id" placeholder="1" min="1">
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="getOrdersByCustomer()">
+        <div class="spinner"></div>
+        <span class="btn-label">Send Request</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- RESPONSE PANEL -->
+  <aside class="response-panel">
+    <div class="response-header">
+      <span class="response-title">Response</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="time-label" id="resp-time"></span>
+        <div class="status-badge" id="status-badge">
+          <div class="status-dot"></div>
+          <span class="status-code" id="status-code">—</span>
+        </div>
+        <button class="copy-btn" onclick="copyResponse()">Copy</button>
+      </div>
+    </div>
+    <div class="response-tabs">
+      <div class="response-tab active" onclick="switchTab('body')">Body</div>
+      <div class="response-tab" onclick="switchTab('history')">History <span id="history-count" style="color:var(--text3);margin-left:4px;"></span></div>
+    </div>
+    <div class="response-body">
+      <div class="response-tab-content active" id="tab-body">
+        <div class="empty-state" id="empty-state">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="8" y="8" width="24" height="24" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M14 20h12M14 15h8M14 25h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <p>Send a request to see the response</p>
+        </div>
+        <div class="json-viewer" id="json-output" style="display:none;"></div>
+      </div>
+      <div class="response-tab-content" id="tab-history">
+        <div class="history-list" id="history-list">
+          <div class="empty-state">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="1.5"/><path d="M20 14v7l4 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <p>No requests yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let history = [];
+let lastResponse = null;
+let itemCount = 0;
+
+// ── Navigation ─────────────────────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.response-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.response-tab-content').forEach(t => t.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ── Order Items ────────────────────────────────────────────────────────────
+function addOrderItem() {
+  itemCount++;
+  const id = itemCount;
+  const builder = document.getElementById('items-builder');
+  const row = document.createElement('div');
+  row.className = 'order-item-row';
+  row.id = 'item-row-' + id;
+  row.innerHTML = `
+    <div class="field">
+      <label>product_id <span class="req">*</span></label>
+      <input type="number" id="item-pid-${id}" placeholder="1" min="1">
+    </div>
+    <div class="field">
+      <label>quantity <span class="req">*</span></label>
+      <input type="number" id="item-qty-${id}" placeholder="1" min="1">
+    </div>
+    <button class="btn-icon" onclick="removeItem(${id})" title="Remove">✕</button>
+  `;
+  builder.appendChild(row);
+}
+
+function removeItem(id) {
+  const el = document.getElementById('item-row-' + id);
+  if (el) el.remove();
+}
+
+// ── HTTP Helper ────────────────────────────────────────────────────────────
+async function request(method, path, body, btnEl) {
+  const base = document.getElementById('baseUrl').value.replace(/\/$/, '');
+  const locale = document.getElementById('localeSelect').value;
+  const url = base + path;
+
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.classList.add('loading');
+  }
+
+  const t0 = performance.now();
+
+  try {
+    const opts = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Language': locale,
+      },
+    };
+    if (body) opts.body = JSON.stringify(body);
+
+    const res = await fetch(url, opts);
+    const elapsed = Math.round(performance.now() - t0);
+    const data = await res.json();
+
+    renderResponse(res.status, data, elapsed);
+    addHistory(method, path, res.status, elapsed, data);
+
+    if (res.ok) {
+      showToast('✓ ' + (data.message || 'Success'), 'ok');
+    } else {
+      showToast('✗ ' + (data.message || 'Error'), 'err');
+    }
+
+    return data;
+  } catch (err) {
+    const elapsed = Math.round(performance.now() - t0);
+    const errData = { success: false, message: err.message };
+    renderResponse(0, errData, elapsed);
+    addHistory(method, path, 0, elapsed, errData);
+    showToast('✗ Network error: ' + err.message, 'err');
+  } finally {
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.classList.remove('loading');
+    }
+  }
+}
+
+// ── Render Response ────────────────────────────────────────────────────────
+function renderResponse(status, data, elapsed) {
+  lastResponse = data;
+
+  const badge = document.getElementById('status-badge');
+  const codeEl = document.getElementById('status-code');
+  const timeEl = document.getElementById('resp-time');
+  const empty  = document.getElementById('empty-state');
+  const output = document.getElementById('json-output');
+
+  badge.className = 'status-badge ' + (status >= 200 && status < 300 ? 'status-ok' : 'status-err');
+  codeEl.textContent = status || 'ERR';
+  timeEl.textContent = elapsed + 'ms';
+
+  empty.style.display = 'none';
+  output.style.display = 'block';
+  output.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
+}
+
+function syntaxHighlight(json) {
+  return json
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) return `<span class="json-key">${match}</span>`;
+        return `<span class="json-str">${match}</span>`;
+      }
+      if (/true|false/.test(match)) return `<span class="json-bool">${match}</span>`;
+      if (/null/.test(match))       return `<span class="json-null">${match}</span>`;
+      return `<span class="json-num">${match}</span>`;
+    });
+}
+
+// ── History ────────────────────────────────────────────────────────────────
+function addHistory(method, path, status, elapsed, data) {
+  history.unshift({ method, path, status, elapsed, data, time: new Date() });
+  if (history.length > 50) history.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  const count = document.getElementById('history-count');
+  count.textContent = history.length ? `(${history.length})` : '';
+
+  if (!history.length) {
+    list.innerHTML = '<div class="empty-state"><p>No requests yet</p></div>';
+    return;
+  }
+
+  list.innerHTML = history.map((h, i) => {
+    const ok = h.status >= 200 && h.status < 300;
+    const cls = h.method === 'POST' ? 'method-post' : 'method-get';
+    const timeStr = h.time.toLocaleTimeString();
+    return `
+      <div class="history-item" onclick="loadHistory(${i})">
+        <span class="method-badge ${cls} history-method">${h.method}</span>
+        <div class="history-info">
+          <div class="history-name">${h.path}</div>
+          <div class="history-time">${timeStr} · ${h.elapsed}ms</div>
+        </div>
+        <span class="history-status" style="color:${ok ? 'var(--green)' : 'var(--red)'}">${h.status || 'ERR'}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function loadHistory(i) {
+  const h = history[i];
+  const ok = h.status >= 200 && h.status < 300;
+  renderResponse(h.status, h.data, h.elapsed);
+  // switch to body tab
+  document.querySelectorAll('.response-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.response-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('[onclick="switchTab(\'body\')"]').classList.add('active');
+  document.getElementById('tab-body').classList.add('active');
+}
+
+// ── Copy ───────────────────────────────────────────────────────────────────
+function copyResponse() {
+  if (!lastResponse) return;
+  navigator.clipboard.writeText(JSON.stringify(lastResponse, null, 2));
+  showToast('Copied to clipboard', 'ok');
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function showToast(msg, type) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ── API calls ──────────────────────────────────────────────────────────────
+function getBtn(el) {
+  return el.closest('.panel').querySelector('.btn-submit');
+}
+
+function createCustomer() {
+  const btn = document.querySelector('#panel-create-customer .btn-submit');
+  const body = {
+    name:  document.getElementById('c-name').value.trim(),
+    email: document.getElementById('c-email').value.trim(),
+  };
+  const phone = document.getElementById('c-phone').value.trim();
+  if (phone) body.phone = phone;
+  if (!body.name || !body.email) { showToast('Name and email are required', 'err'); return; }
+  request('POST', '/customers', body, btn);
+}
+
+function getCustomer() {
+  const btn = document.querySelector('#panel-get-customer .btn-submit');
+  const id = document.getElementById('gc-id').value;
+  if (!id) { showToast('Customer ID is required', 'err'); return; }
+  request('GET', `/customers/${id}`, null, btn);
+}
+
+function createProduct() {
+  const btn = document.querySelector('#panel-create-product .btn-submit');
+  const body = {
+    name:  document.getElementById('p-name').value.trim(),
+    sku:   document.getElementById('p-sku').value.trim(),
+    price: document.getElementById('p-price').value.trim(),
+  };
+  const desc = document.getElementById('p-desc').value.trim();
+  if (desc) body.description = desc;
+  if (!body.name || !body.sku || !body.price) { showToast('Name, SKU and price are required', 'err'); return; }
+  request('POST', '/products', body, btn);
+}
+
+function getProduct() {
+  const btn = document.querySelector('#panel-get-product .btn-submit');
+  const id = document.getElementById('gp-id').value;
+  if (!id) { showToast('Product ID is required', 'err'); return; }
+  request('GET', `/products/${id}`, null, btn);
+}
+
+function createOrder() {
+  const btn = document.querySelector('#panel-create-order .btn-submit');
+  const customerId = parseInt(document.getElementById('o-customer').value);
+  if (!customerId) { showToast('Customer ID is required', 'err'); return; }
+
+  const rows = document.querySelectorAll('#items-builder .order-item-row');
+  if (!rows.length) { showToast('Add at least one item', 'err'); return; }
+
+  const items = [];
+  for (const row of rows) {
+    const idInput  = row.querySelector('[id^="item-pid-"]');
+    const qtyInput = row.querySelector('[id^="item-qty-"]');
+    const pid = parseInt(idInput.value);
+    const qty = parseInt(qtyInput.value);
+    if (!pid || !qty) { showToast('All items need product_id and quantity', 'err'); return; }
+    items.push({ product_id: pid, quantity: qty });
+  }
+
+  const body = { customer_id: customerId, items };
+  const notes = document.getElementById('o-notes').value.trim();
+  if (notes) body.notes = notes;
+
+  request('POST', '/orders', body, btn);
+}
+
+function getOrder() {
+  const btn = document.querySelector('#panel-get-order .btn-submit');
+  const id = document.getElementById('go-id').value;
+  if (!id) { showToast('Order ID is required', 'err'); return; }
+  request('GET', `/orders/${id}`, null, btn);
+}
+
+function getOrdersByCustomer() {
+  const btn = document.querySelector('#panel-orders-by-customer .btn-submit');
+  const id = document.getElementById('obc-id').value;
+  if (!id) { showToast('Customer ID is required', 'err'); return; }
+  request('GET', `/orders/by-customer/${id}`, null, btn);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+addOrderItem(); // pre-add one item row for orders
+</script>
+</body>
+</html>

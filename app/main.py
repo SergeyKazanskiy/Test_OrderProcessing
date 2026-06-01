@@ -22,6 +22,7 @@ from app.db.session import Base, engine
 from app.events.bus import event_bus
 from app.events.handlers import on_customer_created, on_order_created, on_product_created
 from app.events.types import CustomerEvents, OrderEvents, ProductEvents
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(
     level=logging.INFO,
@@ -55,6 +56,15 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         lifespan=_lifespan,
+    )
+
+    # ── CORS ───────────────────────────────────────────────────────────────
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     # ── Routers ────────────────────────────────────────────────────────────
