@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# Testing
+.pytest_cache/
+
+# MacOS
+.DS_Store
+
+# Database
+*.db
+
+# Alembic
+alembic/versions/*.py
