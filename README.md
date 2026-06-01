@@ -38,7 +38,8 @@
 
 Для проверки работы backend-модуля и отправки тестовых запросов вы можете запустить веб-интерфейс прямо в браузере:
 
-👉 [Открыть демонстрационную страницу (test.html)](https://github.io)
+👉 [Открыть демонстрационную страницу (test.html)](https://github.io?github.com/SergeyKazanskiy/Test_OrderProcessing/blob/main/test.html)
+[Открыть интерактивный тестер API (test.html)](https://github.io)
 
 ---
 
