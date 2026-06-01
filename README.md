@@ -34,14 +34,6 @@
 
 ---
 
-## 🌐 Интерактивная демонстрация
-
-Для проверки работы backend-модуля и отправки тестовых запросов вы можете запустить веб-интерфейс прямо в браузере:
-
-👉 [Открыть демонстрационную страницу](https://htmlpreview.github.io/?https://raw.githubusercontent.com/SergeyKazanskiy/Test_OrderProcessing/main/test.html)
-
----
-
 ## 🛠 Технологический стек
 
 | Компонент | Технология | Версия |
@@ -283,43 +275,49 @@ order_module/
 
 ## 🚀 Быстрый старт
 
-### 1. Клонирование и окружение
+### 1. Клонирование проекта
 
 ```bash
 git clone <repo-url>
-cd order_module
-
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+# cd Test_OrderProcessing // если не в папке
 ```
 
-### 2. Установка зависимостей
+### 2. Создание виртуального окружения
 
 ```bash
-pip install -r requirements.txt "pydantic[email]"
+python -m venv .venv # или python3 -m venv .venv
+source .venv/bin/activate
+# Windows:
+# .venv\Scripts\activate
 ```
 
-### 3. Конфигурация
+### 3. Установка зависимостей
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Создание файла настроек
 
 ```bash
 cp .env.example .env
-# Отредактируйте .env под вашу БД
 ```
 
-### 4. Запуск с PostgreSQL
-
-```bash
-# Убедитесь, что PostgreSQL запущен и база создана:
-# createdb orders_db
-
-uvicorn app.main:app --reload
-```
-
-### 5. Запуск с SQLite (без PostgreSQL — для разработки)
+### 5.1. Запуск с SQLite (без PostgreSQL — для разработки)
 
 ```bash
 # DATABASE_URL по умолчанию = sqlite+aiosqlite:///./test.db
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
+```
+
+### 5.2. Запуск с PostgreSQL
+
+```bash
+# Проверте файл .env
+# Убедитесь, что PostgreSQL запущен и база создана:
+# createdb orders_db
+
+python -m uvicorn app.main:app --reload
 ```
 
 После запуска:
@@ -328,6 +326,12 @@ uvicorn app.main:app --reload
 
 > Таблицы создаются автоматически при старте приложения.  
 > В продакшене используйте Alembic-миграции.
+
+## 🌐 Интерактивная демонстрация
+
+Для проверки работы backend-модуля и отправки тестовых запросов вы можете запустить веб-интерфейс прямо в браузере:
+
+👉 [Открыть демонстрационную страницу](https://htmlpreview.github.io/?https://raw.githubusercontent.com/SergeyKazanskiy/Test_OrderProcessing/main/test.html)
 
 ---
 

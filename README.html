@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Processing Module — README</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Geologica:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #f7f8fc;
+    --bg2:      #ffffff;
+    --bg3:      #f0f2f8;
+    --bg4:      #e8ecf5;
+    --border:   #dce1ee;
+    --text:     #1a1f35;
+    --text2:    #5a6280;
+    --text3:    #9aa0bc;
+    --accent:   #3b5bdb;
+    --accent2:  #4c6ef5;
+    --accent-bg:#eef2ff;
+    --green:    #2f9e44;
+    --green-bg: #ebfbee;
+    --red:      #c92a2a;
+    --red-bg:   #fff5f5;
+    --yellow:   #e67700;
+    --yellow-bg:#fff9db;
+    --code-bg:  #1e2030;
+    --code-text:#cdd6f4;
+    --font:     'Geologica', sans-serif;
+    --mono:     'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247,248,252,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 54px;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .topbar-logo {
+    width: 30px; height: 30px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 15px;
+  }
+
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 10px 5px 12px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+  }
+
+  .lang-switcher select {
+    border: none;
+    outline: none;
+    background: none;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    padding-right: 4px;
+  }
+
+  /* ── LAYOUT ── */
+  .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── TOC SIDEBAR ── */
+  .doc-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: 70px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 13px;
+  }
+
+  .toc-title {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 5px 8px;
+    border-radius: 5px;
+    color: var(--text2);
+    text-decoration: none;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .toc a:hover { background: var(--bg3); color: var(--accent); }
+
+  /* ── CONTENT ── */
+  .content {}
+
+  /* Hero */
+  .hero {
+    margin-bottom: 40px;
+    padding: 36px 40px;
+    background: linear-gradient(135deg, var(--accent) 0%, #6741d9 100%);
+    border-radius: 16px;
+    color: #fff;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .hero p { font-size: 15px; opacity: 0.85; line-height: 1.6; }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .hero-badge {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--mono);
+  }
+
+  /* Section headings */
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 28px 0 10px;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text2);
+    margin: 20px 0 8px;
+    font-family: var(--mono);
+  }
+
+  p { margin-bottom: 12px; color: var(--text2); }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--border); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+  thead tr { background: var(--bg3); }
+
+  th {
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); }
+
+  td:first-child { color: var(--text); font-weight: 500; white-space: nowrap; }
+  td code { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 12px 0 20px;
+    position: relative;
+  }
+
+  pre code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--code-text);
+    line-height: 1.7;
+  }
+
+  /* Inline code */
+  p code, li code, td code, h4 code {
+    background: var(--accent-bg);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+
+  /* Architecture diagram */
+  .arch-diagram {
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: #a6adc8;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  .arch-comment { color: #6c7086; }
+  .arch-box     { color: #cba6f7; }
+  .arch-arrow   { color: #89b4fa; }
+  .arch-label   { color: #a6e3a1; }
+
+  /* Lists */
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+
+  li { color: var(--text2); margin-bottom: 4px; }
+  li strong { color: var(--text); }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .card:hover { border-color: var(--accent2); box-shadow: 0 2px 12px rgba(59,91,219,0.08); }
+
+  .card-icon { font-size: 20px; margin-bottom: 8px; }
+  .card-title { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* Alert / Note */
+  .note {
+    background: var(--yellow-bg);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    color: var(--text2);
+  }
+
+  .note strong { color: var(--yellow); }
+
+  /* Event table badges */
+  .ev-badge {
+    display: inline-block;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Method badges */
+  .method { display: inline-block; font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .method-post { background: #dbe4ff; color: #3b5bdb; }
+  .method-get  { background: #ebfbee; color: #2f9e44; }
+
+  /* Step list */
+  .steps { list-style: none; padding: 0; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    padding: 12px 16px 12px 48px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    color: var(--text2);
+  }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* HR */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* Test badges */
+  .test-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-right: 4px;
+  }
+
+  .test-ok  { background: var(--green-bg); color: var(--green); }
+  .test-err { background: var(--red-bg);   color: var(--red); }
+
+  /* Rule blocks */
+  .rule-group {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .rule-group h3 { margin: 0 0 10px; font-size: 15px; }
+  .rule-group ul { margin: 0; }
+
+  strong { color: var(--text); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* lang hidden */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+
+  /* inline bilingual spans */
+  span[data-lang] { display: none; }
+  span[data-lang].visible { display: inline; }
+
+  @media (max-width: 768px) {
+    .doc-layout { grid-template-columns: 1fr; }
+    .toc { display: none; }
+    .cards { grid-template-columns: 1fr; }
+    .wrapper { padding: 24px 20px 60px; }
+    .topbar { padding: 0 20px; }
+    .hero { padding: 24px 20px; }
+    .hero h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">⬡</div>
+    Order Processing Module
+  </div>
+  <label class="lang-switcher">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 1c-1.5 2-2 3.8-2 6s.5 4 2 6M7 1c1.5 2 2 3.8 2 6s-.5 4-2 6M1 7h12" stroke="currentColor" stroke-width="1.3"/></svg>
+    <select id="langSelect" onchange="setLang(this.value)">
+      <option value="uk">🇺🇦 Українська</option>
+      <option value="ru">🇷🇺 Русский</option>
+    </select>
+  </label>
+</div>
+
+<div class="wrapper">
+  <div class="doc-layout">
+
+    <!-- TOC -->
+    <aside class="toc">
+      <div class="toc-title" id="toc-title">Зміст</div>
+      <a href="#features" id="toc-features">✨ Можливості</a>
+      <a href="#stack" id="toc-stack">🛠 Стек</a>
+      <a href="#architecture" id="toc-arch">🏛 Архітектура</a>
+      <a href="#structure" id="toc-struct">📁 Структура</a>
+      <a href="#quickstart" id="toc-start">🚀 Швидкий старт</a>
+      <a href="#config" id="toc-config">⚙️ Конфігурація</a>
+      <a href="#api" id="toc-api">📡 API Reference</a>
+      <a href="#tests" id="toc-tests">🧪 Тести</a>
+      <a href="#rules" id="toc-rules">🔒 Бізнес-правила</a>
+      <a href="#i18n" id="toc-i18n">🌍 Локалізація</a>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- HERO -->
+      <div class="hero">
+        <h1>🛒 Order Processing Module</h1>
+        <div class="hero-badges">
+          <span class="hero-badge">FastAPI 0.115</span>
+          <span class="hero-badge">SQLAlchemy 2.0</span>
+          <span class="hero-badge">Pydantic v1</span>
+          <span class="hero-badge">asyncpg</span>
+          <span class="hero-badge">Event Bus</span>
+          <span class="hero-badge">i18n EN/UK/RU</span>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <section id="features">
+        <h2>✨ <span data-lang="uk" class="visible">Можливості</span><span data-lang="ru">Возможности</span></h2>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">👤</div>
+            <div class="card-title" data-i18n="feat-c-title">Створення клієнта</div>
+            <div class="card-desc" data-i18n="feat-c-desc">Реєстрація з перевіркою унікальності email</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <div class="card-title" data-i18n="feat-p-title">Створення товару</div>
+            <div class="card-desc" data-i18n="feat-p-desc">Додавання товару з унікальним SKU та ціною</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🧾</div>
+            <div class="card-title" data-i18n="feat-o-title">Створення замовлення</div>
+            <div class="card-desc" data-i18n="feat-o-desc">Оформлення замовлення з автоматичним розрахунком суми</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📋</div>
+            <div class="card-title" data-i18n="feat-l-title">Список замовлень</div>
+            <div class="card-desc" data-i18n="feat-l-desc">Отримання всіх замовлень по ID клієнта</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">💰</div>
+            <div class="card-title" data-i18n="feat-t-title">Автоматичний розрахунок</div>
+            <div class="card-desc" data-i18n="feat-t-desc">Сума = Σ (unit_price × quantity) по всіх позиціях</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📡</div>
+            <div class="card-title">Event Bus</div>
+            <div class="card-desc" data-i18n="feat-e-desc">Публікація доменних подій при кожному створенні сутності</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STACK -->
+      <section id="stack">
+        <h2>🛠 <span data-lang="uk" class="visible">Технологічний стек</span><span data-lang="ru">Технологический стек</span></h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th data-i18n="th-component">Компонент</th>
+              <th data-i18n="th-tech">Технологія</th>
+              <th data-i18n="th-version">Версія</th>
+            </tr></thead>
+            <tbody>
+              <tr><td data-i18n="stack-fw">Web-фреймворк</td><td>FastAPI</td><td>0.115</td></tr>
+              <tr><td>ORM</td><td>SQLAlchemy (async)</td><td>2.0</td></tr>
+              <tr><td data-i18n="stack-db">База даних</td><td>PostgreSQL / SQLite</td><td>—</td></tr>
+              <tr><td data-i18n="stack-drv">Async-драйвер PG</td><td>asyncpg</td><td>0.29</td></tr>
+              <tr><td data-i18n="stack-drv2">Async-драйвер SQLite</td><td>aiosqlite</td><td>0.20</td></tr>
+              <tr><td data-i18n="stack-val">Валідація</td><td>Pydantic</td><td>1.10</td></tr>
+              <tr><td data-i18n="stack-cfg">Конфігурація</td><td>pydantic BaseSettings</td><td>—</td></tr>
+              <tr><td data-i18n="stack-mig">Міграції</td><td>Alembic</td><td>1.13</td></tr>
+              <tr><td data-i18n="stack-test">Тести</td><td>pytest + pytest-asyncio</td><td>8.3 / 0.24</td></tr>
+              <tr><td data-i18n="stack-http">HTTP-клієнт для тестів</td><td>httpx (ASGITransport)</td><td>0.27</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ARCHITECTURE -->
+      <section id="architecture">
+        <h2>🏛 <span data-lang="uk" class="visible">Архітектура та ключові рішення</span><span data-lang="ru">Архитектура и ключевые решения</span></h2>
+
+        <h3 data-i18n="arch-layers">Багатошарова архітектура</h3>
+        <div class="arch-diagram">
+<span class="arch-label">HTTP Request</span>
+     │
+     ▼
+<span class="arch-box">┌─────────────────────────────────────┐</span>
+<span class="arch-box">│         API Layer (FastAPI)         │</span>  <span class="arch-comment">← <span data-i18n="arch-api-comment">маршрути, locale dependency, обробники помилок</span></span>
+<span class="arch-box">│   endpoints / exception_handlers    │</span>
+<span class="arch-box">└──────────────────┬──────────────────┘</span>
+                   │
+                   ▼
+<span class="arch-box">┌─────────────────────────────────────┐</span>
+<span class="arch-box">│        Service Layer                │</span>  <span class="arch-comment">← <span data-i18n="arch-svc-comment">оркестрація use-case, rules + repo + event_bus</span></span>
+<span class="arch-box">│  CustomerService / ProductService   │</span>
+<span class="arch-box">│  OrderService                       │</span>
+<span class="arch-box">└──────┬───────────────────┬──────────┘</span>
+       │                   │
+       ▼                   ▼
+<span class="arch-box">┌────────────┐   ┌─────────────────────┐</span>
+<span class="arch-box">│   Rules    │   │  Repository Layer   │</span>  <span class="arch-comment">← <span data-i18n="arch-repo-comment">чистий доступ до БД, без бізнес-логіки</span></span>
+<span class="arch-box">│  Service   │   │  BaseRepository +   │</span>
+<span class="arch-box">│(stateless) │   │  domain-specific    │</span>
+<span class="arch-box">└────────────┘   └──────────┬──────────┘</span>
+                             │
+                             ▼
+                  <span class="arch-box">┌──────────────────┐</span>
+                  <span class="arch-box">│   ORM Models     │</span>  <span class="arch-comment">← SQLAlchemy 2.0 mapped_column</span>
+                  <span class="arch-box">│ Customer/Product │</span>
+                  <span class="arch-box">│ Order/OrderItem  │</span>
+                  <span class="arch-box">└──────────────────┘</span></div>
+
+        <h3>📡 Event Bus</h3>
+        <p data-i18n="eventbus-desc">Реалізована <strong>in-process async Event Bus</strong> (<code>app/events/bus.py</code>) на базі <code>asyncio.Task</code>.</p>
+        <ul>
+          <li data-i18n="eb-1"><code>publish()</code> — fire-and-forget: планує кожен обробник як окремий <code>asyncio.Task</code></li>
+          <li data-i18n="eb-2">Видавець <strong>не блокується</strong> і не чекає завершення обробників</li>
+          <li data-i18n="eb-3">Падіння одного підписника <strong>ізольоване</strong> — інші обробники продовжують роботу</li>
+          <li data-i18n="eb-4">Підтримуються як <code>async def</code>, так і звичайні <code>def</code> хендлери</li>
+          <li data-i18n="eb-5">Декоратор <code>@bus.on("event.type")</code> для зручної реєстрації</li>
+        </ul>
+<pre><code><span style="color:#6c7086"># <span data-i18n="code-publish">Публікація події в сервісі</span></span>
+await event_bus.publish(
+    Event(
+        event_type=OrderEvents.CREATED,
+        payload={"order_id": order.id, "total_amount": str(order.total_amount)},
+    )
+)
+
+<span style="color:#6c7086"># <span data-i18n="code-subscribe">Підписка через декоратор</span></span>
+@event_bus.on("order.created")
+async def on_order_created(event: Event) -> None:
+    logger.info("New order: %s", event.payload["order_id"])</code></pre>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="th-event">Подія</th><th data-i18n="th-trigger">Тригер</th></tr></thead>
+            <tbody>
+              <tr><td><span class="ev-badge">customer.created</span></td><td data-i18n="ev-c">Створення нового клієнта</td></tr>
+              <tr><td><span class="ev-badge">product.created</span></td><td data-i18n="ev-p">Створення нового товару</td></tr>
+              <tr><td><span class="ev-badge">order.created</span></td><td data-i18n="ev-o">Оформлення нового замовлення</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>⚖️ <span data-i18n="rules-title">Виділений Rules Service</span></h3>
+        <p data-i18n="rules-desc">Бізнес-правила винесені в <strong>окремий stateless-шар</strong> (<code>app/rules/order_rules.py</code>).</p>
+        <ul>
+          <li data-i18n="rules-1">Правила змінюються <strong>незалежно</strong> від логіки персистентності</li>
+          <li data-i18n="rules-2">Легко тестувати як чисті функції — без БД, без HTTP</li>
+          <li data-i18n="rules-3">Сервіси викликають <code>Rules</code> до будь-якої мутації даних</li>
+        </ul>
+<pre><code><span style="color:#6c7086"># <span data-i18n="code-rules">В OrderService — одна точка входу для всіх правил</span></span>
+OrderRules.validate_order_create(dto, customer, found_products)</code></pre>
+
+        <h3>🌍 <span data-i18n="i18n-resp-title">Локалізація відповідей</span></h3>
+        <p data-i18n="i18n-resp-desc">Всі повідомлення API (успіх і помилки) повертаються мовою клієнта.</p>
+        <ol>
+          <li data-i18n="i18n-1">FastAPI-залежність <code>get_locale</code> розбирає заголовок <code>Accept-Language</code></li>
+          <li data-i18n="i18n-2">Обирається найкращий збіг із підтримуваних локалей (<code>en</code>, <code>uk</code>, <code>ru</code>)</li>
+          <li data-i18n="i18n-3">Функція <code>translate(key, locale, **context)</code> підставляє змінні в шаблон</li>
+          <li data-i18n="i18n-4">При невідомій локалі — fallback на <code>default_locale</code> (за замовчуванням <code>en</code>)</li>
+        </ol>
+<pre><code>Accept-Language: uk   →  "Замовлення успішно створено."
+Accept-Language: ru   →  "Заказ успешно создан."
+Accept-Language: fr   →  "Order created successfully."  (fallback)</code></pre>
+
+        <h3>💰 <span data-i18n="total-title">Автоматичний розрахунок суми</span></h3>
+        <p data-i18n="total-desc">Метод <code>Order.recalculate_total()</code> обчислює суму на рівні доменної моделі. <code>unit_price</code> <strong>знімається як знімок</strong> з <code>Product.price</code> у момент створення замовлення.</p>
+<pre><code>def recalculate_total(self) -> None:
+    self.total_amount = sum(
+        (item.unit_price * item.quantity for item in self.items),
+        Decimal("0.00"),
+    )</code></pre>
+
+        <h3>🎁 <span data-i18n="envelope-title">Єдиний конверт відповіді</span></h3>
+<pre><code><span style="color:#a6e3a1">// <span data-i18n="code-success">Успіх</span></span>
+{ "success": true,  "message": "Order created successfully.", "data": { ... } }
+
+<span style="color:#f38ba8">// <span data-i18n="code-error">Помилка</span></span>
+{ "success": false, "message": "Customer with id=99 not found.", "detail": null }</code></pre>
+      </section>
+
+      <!-- STRUCTURE -->
+      <section id="structure">
+        <h2>📁 <span data-lang="uk" class="visible">Структура проекту</span><span data-lang="ru">Структура проекта</span></h2>
+<pre><code>order_module/
+│
+├── app/
+│   ├── main.py                 <span style="color:#6c7086"># <span data-i18n="s-main">Фабрика застосунку, lifespan, реєстрація хендлерів</span></span>
+│   ├── core/
+│   │   ├── config.py           <span style="color:#6c7086"># <span data-i18n="s-config">Налаштування через pydantic BaseSettings (.env)</span></span>
+│   │   └── exceptions.py       <span style="color:#6c7086"># <span data-i18n="s-exc">Ієрархія AppError → NotFoundError, BusinessRuleViolationError</span></span>
+│   ├── db/
+│   │   └── session.py          <span style="color:#6c7086"># <span data-i18n="s-session">Async engine, AsyncSession, get_session dependency</span></span>
+│   ├── models/
+│   │   ├── base.py             <span style="color:#6c7086"># Base, utcnow()</span>
+│   │   ├── enums.py            <span style="color:#6c7086"># OrderStatus</span>
+│   │   ├── customer.py / product.py / order.py / order_item.py
+│   ├── schemas/
+│   │   ├── base.py             <span style="color:#6c7086"># OrmBase, ApiResponse, ErrorResponse</span>
+│   │   ├── customer.py / product.py / order.py
+│   ├── i18n/
+│   │   └── translator.py       <span style="color:#6c7086"># <span data-i18n="s-i18n">Каталоги EN/UK/RU, функція translate()</span></span>
+│   ├── events/
+│   │   ├── bus.py              <span style="color:#6c7086"># EventBus: subscribe / publish / @on</span>
+│   │   ├── types.py            <span style="color:#6c7086"># <span data-i18n="s-types">Константи: CustomerEvents, ProductEvents, OrderEvents</span></span>
+│   │   └── handlers.py         <span style="color:#6c7086"># <span data-i18n="s-handlers">Підписники подій</span></span>
+│   ├── rules/
+│   │   └── order_rules.py      <span style="color:#6c7086"># CustomerRules, ProductRules, OrderRules</span>
+│   ├── repositories/
+│   │   ├── base.py             <span style="color:#6c7086"># BaseRepository[T]: get_by_id, add, delete</span>
+│   │   ├── customer_repo.py    <span style="color:#6c7086"># + get_by_email</span>
+│   │   ├── product_repo.py     <span style="color:#6c7086"># + get_by_sku, get_by_ids</span>
+│   │   └── order_repo.py       <span style="color:#6c7086"># + get_by_customer, get_by_id_with_items</span>
+│   ├── services/
+│   │   ├── customer_service.py / product_service.py / order_service.py
+│   └── api/
+│       ├── exception_handlers.py
+│       └── v1/
+│           ├── dependencies.py
+│           └── endpoints/
+│               ├── customers.py / products.py / orders.py
+├── tests/
+│   ├── conftest.py / test_api.py / test_rules.py / test_i18n.py / test_event_bus.py
+├── requirements.txt
+├── pytest.ini
+└── .env.example</code></pre>
+      </section>
+
+      <!-- QUICKSTART -->
+      <section id="quickstart">
+        <h2>🚀 <span data-lang="uk" class="visible">Швидкий старт</span><span data-lang="ru">Быстрый старт</span></h2>
+        <ol class="steps">
+          <li><strong data-i18n="step1-title">Клонування проекту</strong>
+            <pre style="margin-top:8px"><code>git clone &lt;repo-url&gt;
+cd Test_OrderProcessing</code></pre>
+          </li>
+          <li><strong data-i18n="step2-title">Створення віртуального оточення</strong>
+            <pre style="margin-top:8px"><code>python -m venv .venv
+source .venv/bin/activate
+<span style="color:#6c7086"># Windows: .venv\Scripts\activate</span></code></pre>
+          </li>
+          <li><strong data-i18n="step3-title">Встановлення залежностей</strong>
+            <pre style="margin-top:8px"><code>pip install -r requirements.txt</code></pre>
+          </li>
+          <li><strong data-i18n="step4-title">Створення файлу налаштувань</strong>
+            <pre style="margin-top:8px"><code>cp .env.example .env</code></pre>
+          </li>
+          <li><strong data-i18n="step5a-title">Запуск з SQLite (для розробки)</strong>
+            <pre style="margin-top:8px"><code><span style="color:#6c7086"># DATABASE_URL за замовчуванням = sqlite+aiosqlite:///./test.db</span>
+python -m uvicorn app.main:app --reload</code></pre>
+          </li>
+          <li><strong data-i18n="step5b-title">Або запуск з PostgreSQL</strong>
+            <pre style="margin-top:8px"><code><span style="color:#6c7086"># Перевірте файл .env, переконайтесь що PostgreSQL запущено</span>
+<span style="color:#6c7086"># createdb orders_db</span>
+python -m uvicorn app.main:app --reload</code></pre>
+          </li>
+        </ol>
+        <div class="note">
+          <strong data-i18n="note-title">Після запуску:</strong>
+          <span data-i18n="note-swagger"> Swagger UI → </span><a href="http://127.0.0.1:8000/docs" target="_blank">http://127.0.0.1:8000/docs</a> &nbsp;·&nbsp;
+          ReDoc → <a href="http://127.0.0.1:8000/redoc" target="_blank">http://127.0.0.1:8000/redoc</a>
+        </div>
+        <p data-i18n="demo-link">👉 <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/SergeyKazanskiy/Test_OrderProcessing/main/test.html" target="_blank">Відкрити демонстраційну сторінку</a></p>
+      </section>
+
+      <!-- CONFIG -->
+      <section id="config">
+        <h2>⚙️ <span data-lang="uk" class="visible">Конфігурація</span><span data-lang="ru">Конфигурация</span></h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="th-var">Змінна</th><th data-i18n="th-default">За замовчуванням</th><th data-i18n="th-desc">Опис</th></tr></thead>
+            <tbody>
+              <tr><td><code>DATABASE_URL</code></td><td><code>sqlite+aiosqlite:///./test.db</code></td><td data-i18n="cfg-db">URL підключення до БД</td></tr>
+              <tr><td><code>APP_ENV</code></td><td><code>development</code></td><td data-i18n="cfg-env">Оточення (development / production)</td></tr>
+              <tr><td><code>DEFAULT_LOCALE</code></td><td><code>en</code></td><td data-i18n="cfg-locale">Мова відповідей за замовчуванням</td></tr>
+              <tr><td><code>SUPPORTED_LOCALES</code></td><td><code>["en","uk","ru"]</code></td><td data-i18n="cfg-locales">Список підтримуваних локалей</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 data-i18n="cfg-pg-example">Приклад для PostgreSQL:</h4>
+<pre><code>DATABASE_URL=postgresql+asyncpg://postgres:secret@localhost:5432/orders_db
+APP_ENV=production
+DEFAULT_LOCALE=uk</code></pre>
+      </section>
+
+      <!-- API REFERENCE -->
+      <section id="api">
+        <h2>📡 API Reference</h2>
+
+        <h3 data-i18n="api-customers">Клієнти</h3>
+        <h4><span class="method method-post">POST</span> /api/v1/customers — <span data-i18n="api-create-customer">Створити клієнта</span></h4>
+<pre><code>curl -X POST http://localhost:8000/api/v1/customers \
+  -H "Content-Type: application/json" \
+  -H "Accept-Language: uk" \
+  -d '{"name": "Іван Петренко", "email": "ivan@example.com", "phone": "+380501234567"}'</code></pre>
+<pre><code>{
+  "success": true,
+  "message": "Клієнта успішно створено.",
+  "data": {
+    "id": 1, "name": "Іван Петренко",
+    "email": "ivan@example.com", "phone": "+380501234567",
+    "created_at": "2025-01-15T10:00:00Z", "updated_at": "2025-01-15T10:00:00Z"
+  }
+}</code></pre>
+
+        <h3 data-i18n="api-products">Товари</h3>
+        <h4><span class="method method-post">POST</span> /api/v1/products — <span data-i18n="api-create-product">Створити товар</span></h4>
+<pre><code>curl -X POST http://localhost:8000/api/v1/products \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ноутбук Pro", "sku": "LAPTOP-PRO-001", "price": "45999.99"}'</code></pre>
+
+        <h3 data-i18n="api-orders">Замовлення</h3>
+        <h4><span class="method method-post">POST</span> /api/v1/orders — <span data-i18n="api-create-order">Створити замовлення</span></h4>
+<pre><code>curl -X POST http://localhost:8000/api/v1/orders \
+  -H "Content-Type: application/json" \
+  -H "Accept-Language: uk" \
+  -d '{
+    "customer_id": 1,
+    "items": [
+      {"product_id": 1, "quantity": 2},
+      {"product_id": 2, "quantity": 5}
+    ],
+    "notes": "Доставка до 18:00"
+  }'</code></pre>
+<pre><code>{
+  "success": true,
+  "message": "Замовлення успішно створено.",
+  "data": {
+    "id": 1, "customer_id": 1, "status": "pending",
+    "total_amount": "92999.93",
+    "items": [
+      {"product_id": 1, "quantity": 2, "unit_price": "45999.99", "line_total": "91999.98"},
+      {"product_id": 2, "quantity": 5, "unit_price": "199.99",   "line_total": "999.95"}
+    ]
+  }
+}</code></pre>
+
+        <h4><span class="method method-get">GET</span> /api/v1/orders/by-customer/{id} — <span data-i18n="api-orders-by">Замовлення клієнта</span></h4>
+<pre><code>curl http://localhost:8000/api/v1/orders/by-customer/1 -H "Accept-Language: uk"</code></pre>
+
+        <h3 data-i18n="api-errors">Коди помилок</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>HTTP</th><th data-i18n="th-situation">Ситуація</th></tr></thead>
+            <tbody>
+              <tr><td><code>400</code></td><td data-i18n="err-400">Помилка валідації домену (наприклад, від'ємна ціна)</td></tr>
+              <tr><td><code>404</code></td><td data-i18n="err-404">Сутність не знайдена</td></tr>
+              <tr><td><code>422</code></td><td data-i18n="err-422">Порушення бізнес-правила або помилка схеми</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TESTS -->
+      <section id="tests">
+        <h2>🧪 <span data-lang="uk" class="visible">Тести</span><span data-lang="ru">Тесты</span></h2>
+
+        <h3 data-i18n="test-run-all">Запуск всіх тестів</h3>
+<pre><code>pytest tests/ -v</code></pre>
+
+        <h3 data-i18n="test-run-cov">Запуск з покриттям</h3>
+<pre><code>pip install pytest-cov
+pytest tests/ -v --cov=app --cov-report=term-missing</code></pre>
+
+        <h3 data-i18n="test-run-groups">Запуск окремих груп</h3>
+<pre><code><span style="color:#6c7086"># <span data-i18n="test-only-api">Тільки інтеграційні тести API</span></span>
+pytest tests/test_api.py -v
+
+<span style="color:#6c7086"># <span data-i18n="test-only-rules">Тільки бізнес-правила</span></span>
+pytest tests/test_rules.py -v
+
+<span style="color:#6c7086"># <span data-i18n="test-only-i18n">Тільки i18n</span></span>
+pytest tests/test_i18n.py -v
+
+<span style="color:#6c7086"># <span data-i18n="test-only-bus">Тільки Event Bus</span></span>
+pytest tests/test_event_bus.py -v</code></pre>
+
+        <h3 data-i18n="test-desc">📊 Опис тестів</h3>
+
+        <h4>test_api.py — <span data-i18n="test-api-desc">Інтеграційні тести (SQLite in-memory)</span></h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="th-class">Клас</th><th data-i18n="th-test">Тест</th><th data-i18n="th-checks">Перевіряє</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="3">TestCustomerEndpoints</td><td><code>test_create_customer_success</code></td><td data-i18n="tc1">Успішне створення, структура відповіді</td></tr>
+              <tr><td><code>test_create_customer_duplicate_email</code></td><td data-i18n="tc2">422 при дублюванні email</td></tr>
+              <tr><td><code>test_create_customer_invalid_email</code></td><td data-i18n="tc3">422 при невалідному email</td></tr>
+              <tr><td rowspan="3">TestProductEndpoints</td><td><code>test_create_product_success</code></td><td data-i18n="tp1">Створення товару, коректність ціни</td></tr>
+              <tr><td><code>test_create_product_duplicate_sku</code></td><td data-i18n="tp2">422 при дублюванні SKU</td></tr>
+              <tr><td><code>test_get_product_not_found</code></td><td data-i18n="tp3">404 при неіснуючому ID</td></tr>
+              <tr><td rowspan="7">TestOrderEndpoints</td><td><code>test_create_order_success</code></td><td data-i18n="to1">Замовлення створено, total = qty × price</td></tr>
+              <tr><td><code>test_create_order_auto_total_multiple_items</code></td><td data-i18n="to2">Розрахунок суми по кількох позиціях</td></tr>
+              <tr><td><code>test_create_order_no_customer</code></td><td data-i18n="to3">422 при неіснуючому customer_id</td></tr>
+              <tr><td><code>test_create_order_no_items_rejected_by_pydantic</code></td><td data-i18n="to4">422 при порожньому списку товарів</td></tr>
+              <tr><td><code>test_create_order_product_not_found</code></td><td data-i18n="to5">422 при неіснуючому product_id</td></tr>
+              <tr><td><code>test_get_orders_by_customer</code></td><td data-i18n="to6">Список замовлень, коректна кількість</td></tr>
+              <tr><td><code>test_get_orders_unknown_customer</code></td><td data-i18n="to7">404 при неіснуючому клієнті</td></tr>
+              <tr><td rowspan="3">TestLocalisation</td><td><code>test_ukrainian_error_message</code></td><td data-i18n="tl1">Відповідь містить українській текст</td></tr>
+              <tr><td><code>test_russian_error_message</code></td><td data-i18n="tl2">Відповідь містить російський текст</td></tr>
+              <tr><td><code>test_english_fallback</code></td><td data-i18n="tl3">Невідома локаль → fallback на EN</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>test_rules.py — <span data-i18n="test-rules-desc">Unit-тести бізнес-правил</span></h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="th-test">Тест</th><th data-i18n="th-checks">Перевіряє</th></tr></thead>
+            <tbody>
+              <tr><td><code>test_email_unique_passes_when_no_existing</code></td><td data-i18n="tr1">Немає винятку якщо email вільний</td></tr>
+              <tr><td><code>test_email_unique_raises_when_taken</code></td><td data-i18n="tr2"><code>BusinessRuleViolationError</code> при дублі</td></tr>
+              <tr><td><code>test_sku_unique_raises_when_taken</code></td><td data-i18n="tr3"><code>BusinessRuleViolationError</code> при дублі SKU</td></tr>
+              <tr><td><code>test_ensure_customer_exists_raises_when_none</code></td><td data-i18n="tr4"><code>order_no_customer</code> при <code>None</code></td></tr>
+              <tr><td><code>test_ensure_has_items_raises_when_empty</code></td><td data-i18n="tr5"><code>order_no_items</code> при порожньому списку</td></tr>
+              <tr><td><code>test_ensure_item_quantity_invalid</code></td><td data-i18n="tr6"><code>ValidationError</code> при quantity=0</td></tr>
+              <tr><td><code>test_ensure_products_exist_raises_for_missing</code></td><td data-i18n="tr7">Коректний <code>id</code> в контексті помилки</td></tr>
+              <tr><td><code>test_validate_order_create_full_pass</code></td><td data-i18n="tr8">Вся ланцюжок правил без винятків</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>test_event_bus.py — <span data-i18n="test-bus-desc">Unit-тести EventBus</span></h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="th-test">Тест</th><th data-i18n="th-checks">Перевіряє</th></tr></thead>
+            <tbody>
+              <tr><td><code>test_subscribe_and_publish</code></td><td data-i18n="tb1">Хендлер отримує подію з коректним payload</td></tr>
+              <tr><td><code>test_sync_handler_supported</code></td><td data-i18n="tb2">Звичайна <code>def</code>-функція працює як хендлер</td></tr>
+              <tr><td><code>test_handler_error_is_isolated</code></td><td data-i18n="tb3">Падіння одного хендлера не заважає іншому</td></tr>
+              <tr><td><code>test_unsubscribe</code></td><td data-i18n="tb4">Після відписки хендлер не викликається</td></tr>
+              <tr><td><code>test_on_decorator</code></td><td data-i18n="tb5"><code>@bus.on("event")</code> реєструє хендлер</td></tr>
+              <tr><td><code>test_no_handlers_no_error</code></td><td data-i18n="tb6">Публікація без підписників не викликає помилки</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RULES -->
+      <section id="rules">
+        <h2>🔒 <span data-lang="uk" class="visible">Бізнес-правила</span><span data-lang="ru">Бизнес-правила</span></h2>
+        <p data-i18n="rules-note">Всі правила перевіряються до будь-якого звернення до бази даних.</p>
+        <div class="rule-group">
+          <h3>👤 <span data-i18n="rule-customer">Клієнт</span></h3>
+          <ul><li data-i18n="rule-c1">Email повинен бути <strong>унікальним</strong> в системі</li></ul>
+        </div>
+        <div class="rule-group">
+          <h3>📦 <span data-i18n="rule-product">Товар</span></h3>
+          <ul>
+            <li data-i18n="rule-p1">SKU повинен бути <strong>унікальним</strong> в системі</li>
+            <li data-i18n="rule-p2">Ціна повинна бути <strong>строго позитивною</strong></li>
+          </ul>
+        </div>
+        <div class="rule-group">
+          <h3>🧾 <span data-i18n="rule-order">Замовлення</span></h3>
+          <ul>
+            <li data-i18n="rule-o1">Не можна створити замовлення <strong>без існуючого клієнта</strong></li>
+            <li data-i18n="rule-o2">Замовлення повинно містити <strong>хоча б один товар</strong></li>
+            <li data-i18n="rule-o3">Кількість кожного товару в замовленні — <strong>позитивне ціле число</strong></li>
+            <li data-i18n="rule-o4">Всі <code>product_id</code> в позиціях замовлення повинні <strong>існувати в БД</strong></li>
+            <li data-i18n="rule-o5">Сума замовлення <strong>розраховується автоматично</strong> і не приймається від клієнта</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- I18N -->
+      <section id="i18n">
+        <h2>🌍 <span data-lang="uk" class="visible">Локалізація</span><span data-lang="ru">Локализация</span></h2>
+        <p data-i18n="i18n-how">Для отримання відповіді потрібною мовою передавайте заголовок <code>Accept-Language</code>:</p>
+<pre><code>Accept-Language: uk          <span style="color:#6c7086"># Українська</span>
+Accept-Language: ru          <span style="color:#6c7086"># Русский</span>
+Accept-Language: en          <span style="color:#6c7086"># English (default)</span>
+Accept-Language: uk,en;q=0.9 <span style="color:#6c7086"># <span data-i18n="i18n-fallback">Українська з fallback на англійську</span></span></code></pre>
+        <p data-i18n="i18n-add">Додавання нової мови — достатньо додати словник у <code>app/i18n/translator.py</code> та включити код локалі в <code>SUPPORTED_LOCALES</code>.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+// ── Translations dictionary ────────────────────────────────────────────────
+const T = {
+  uk: {
+    "toc-title": "Зміст",
+    "toc-features": "✨ Можливості",
+    "toc-stack": "🛠 Стек",
+    "toc-arch": "🏛 Архітектура",
+    "toc-struct": "📁 Структура",
+    "toc-start": "🚀 Швидкий старт",
+    "toc-config": "⚙️ Конфігурація",
+    "toc-api": "📡 API Reference",
+    "toc-tests": "🧪 Тести",
+    "toc-rules": "🔒 Бізнес-правила",
+    "toc-i18n": "🌍 Локалізація",
+    "hero-desc": "Модуль обробки замовлень на базі <strong>FastAPI + PostgreSQL + SQLAlchemy + Pydantic</strong>.<br>Реалізує повний життєвий цикл замовлення: від створення клієнта і товару до оформлення замовлення з автоматичним розрахунком суми.",
+    "feat-c-title": "Створення клієнта",
+    "feat-c-desc": "Реєстрація з перевіркою унікальності email",
+    "feat-p-title": "Створення товару",
+    "feat-p-desc": "Додавання товару з унікальним SKU та ціною",
+    "feat-o-title": "Створення замовлення",
+    "feat-o-desc": "Оформлення замовлення з автоматичним розрахунком суми",
+    "feat-l-title": "Список замовлень",
+    "feat-l-desc": "Отримання всіх замовлень по ID клієнта",
+    "feat-t-title": "Автоматичний розрахунок",
+    "feat-t-desc": "Сума = Σ (unit_price × quantity) по всіх позиціях",
+    "feat-e-desc": "Публікація доменних подій при кожному створенні сутності",
+    "th-component": "Компонент", "th-tech": "Технологія", "th-version": "Версія",
+    "stack-fw": "Web-фреймворк", "stack-db": "База даних", "stack-drv": "Async-драйвер PG",
+    "stack-drv2": "Async-драйвер SQLite", "stack-val": "Валідація", "stack-cfg": "Конфігурація",
+    "stack-mig": "Міграції", "stack-test": "Тести", "stack-http": "HTTP-клієнт для тестів",
+    "arch-layers": "Багатошарова архітектура",
+    "arch-api-comment": "маршрути, locale dependency, обробники помилок",
+    "arch-svc-comment": "оркестрація use-case, rules + repo + event_bus",
+    "arch-repo-comment": "чистий доступ до БД, без бізнес-логіки",
+    "eventbus-desc": "Реалізована <strong>in-process async Event Bus</strong> (<code>app/events/bus.py</code>) на базі <code>asyncio.Task</code>.",
+    "eb-1": "<code>publish()</code> — fire-and-forget: планує кожен обробник як окремий <code>asyncio.Task</code>",
+    "eb-2": "Видавець <strong>не блокується</strong> і не чекає завершення обробників",
+    "eb-3": "Падіння одного підписника <strong>ізольоване</strong> — інші обробники продовжують роботу",
+    "eb-4": "Підтримуються як <code>async def</code>, так і звичайні <code>def</code> хендлери",
+    "eb-5": "Декоратор <code>@bus.on(\"event.type\")</code> для зручної реєстрації",
+    "code-publish": "Публікація події в сервісі", "code-subscribe": "Підписка через декоратор",
+    "th-event": "Подія", "th-trigger": "Тригер",
+    "ev-c": "Створення нового клієнта", "ev-p": "Створення нового товару", "ev-o": "Оформлення нового замовлення",
+    "rules-title": "Виділений Rules Service",
+    "rules-desc": "Бізнес-правила винесені в <strong>окремий stateless-шар</strong> (<code>app/rules/order_rules.py</code>).",
+    "rules-1": "Правила змінюються <strong>незалежно</strong> від логіки персистентності",
+    "rules-2": "Легко тестувати як чисті функції — без БД, без HTTP",
+    "rules-3": "Сервіси викликають <code>Rules</code> до будь-якої мутації даних",
+    "code-rules": "В OrderService — одна точка входу для всіх правил",
+    "i18n-resp-title": "Локалізація відповідей",
+    "i18n-resp-desc": "Всі повідомлення API (успіх і помилки) повертаються мовою клієнта.",
+    "i18n-1": "FastAPI-залежність <code>get_locale</code> розбирає заголовок <code>Accept-Language</code>",
+    "i18n-2": "Обирається найкращий збіг із підтримуваних локалей (<code>en</code>, <code>uk</code>, <code>ru</code>)",
+    "i18n-3": "Функція <code>translate(key, locale, **context)</code> підставляє змінні в шаблон",
+    "i18n-4": "При невідомій локалі — fallback на <code>default_locale</code> (за замовчуванням <code>en</code>)",
+    "total-title": "Автоматичний розрахунок суми",
+    "total-desc": "Метод <code>Order.recalculate_total()</code> обчислює суму на рівні доменної моделі. <code>unit_price</code> <strong>знімається як знімок</strong> з <code>Product.price</code> у момент створення замовлення.",
+    "envelope-title": "Єдиний конверт відповіді",
+    "code-success": "Успіх", "code-error": "Помилка",
+    "s-main": "Фабрика застосунку, lifespan, реєстрація хендлерів",
+    "s-config": "Налаштування через pydantic BaseSettings (.env)",
+    "s-exc": "Ієрархія AppError → NotFoundError, BusinessRuleViolationError",
+    "s-session": "Async engine, AsyncSession, get_session dependency",
+    "s-i18n": "Каталоги EN/UK/RU, функція translate()",
+    "s-types": "Константи: CustomerEvents, ProductEvents, OrderEvents",
+    "s-handlers": "Підписники подій",
+    "step1-title": "Клонування проекту", "step2-title": "Створення віртуального оточення",
+    "step3-title": "Встановлення залежностей", "step4-title": "Створення файлу налаштувань",
+    "step5a-title": "Запуск з SQLite (для розробки)", "step5b-title": "Або запуск з PostgreSQL",
+    "note-title": "Після запуску:", "note-swagger": " Swagger UI → ",
+    "demo-link": "👉 <a href='https://htmlpreview.github.io/?https://raw.githubusercontent.com/SergeyKazanskiy/Test_OrderProcessing/main/test.html' target='_blank'>Відкрити демонстраційну сторінку</a>",
+    "th-var": "Змінна", "th-default": "За замовчуванням", "th-desc": "Опис",
+    "cfg-db": "URL підключення до БД", "cfg-env": "Оточення (development / production)",
+    "cfg-locale": "Мова відповідей за замовчуванням", "cfg-locales": "Список підтримуваних локалей",
+    "cfg-pg-example": "Приклад для PostgreSQL:",
+    "api-customers": "Клієнти", "api-products": "Товари", "api-orders": "Замовлення",
+    "api-create-customer": "Створити клієнта", "api-create-product": "Створити товар",
+    "api-create-order": "Створити замовлення", "api-orders-by": "Замовлення клієнта",
+    "api-errors": "Коди помилок", "th-situation": "Ситуація",
+    "err-400": "Помилка валідації домену (наприклад, від'ємна ціна)",
+    "err-404": "Сутність не знайдена",
+    "err-422": "Порушення бізнес-правила або помилка схеми",
+    "test-run-all": "Запуск всіх тестів", "test-run-cov": "Запуск з покриттям",
+    "test-run-groups": "Запуск окремих груп",
+    "test-only-api": "Тільки інтеграційні тести API", "test-only-rules": "Тільки бізнес-правила",
+    "test-only-i18n": "Тільки i18n", "test-only-bus": "Тільки Event Bus",
+    "test-desc": "📊 Опис тестів",
+    "test-api-desc": "Інтеграційні тести (SQLite in-memory)",
+    "test-rules-desc": "Unit-тести бізнес-правил", "test-bus-desc": "Unit-тести EventBus",
+    "th-class": "Клас", "th-test": "Тест", "th-checks": "Перевіряє",
+    "tc1": "Успішне створення, структура відповіді", "tc2": "422 при дублюванні email", "tc3": "422 при невалідному email",
+    "tp1": "Створення товару, коректність ціни", "tp2": "422 при дублюванні SKU", "tp3": "404 при неіснуючому ID",
+    "to1": "Замовлення створено, total = qty × price", "to2": "Розрахунок суми по кількох позиціях",
+    "to3": "422 при неіснуючому customer_id", "to4": "422 при порожньому списку товарів",
+    "to5": "422 при неіснуючому product_id", "to6": "Список замовлень, коректна кількість",
+    "to7": "404 при неіснуючому клієнті",
+    "tl1": "Відповідь містить українській текст", "tl2": "Відповідь містить російський текст",
+    "tl3": "Невідома локаль → fallback на EN",
+    "tr1": "Немає винятку якщо email вільний", "tr2": "<code>BusinessRuleViolationError</code> при дублі",
+    "tr3": "<code>BusinessRuleViolationError</code> при дублі SKU", "tr4": "<code>order_no_customer</code> при <code>None</code>",
+    "tr5": "<code>order_no_items</code> при порожньому списку", "tr6": "<code>ValidationError</code> при quantity=0",
+    "tr7": "Коректний <code>id</code> в контексті помилки", "tr8": "Вся ланцюжок правил без винятків",
+    "tb1": "Хендлер отримує подію з коректним payload", "tb2": "Звичайна <code>def</code>-функція працює як хендлер",
+    "tb3": "Падіння одного хендлера не заважає іншому", "tb4": "Після відписки хендлер не викликається",
+    "tb5": "<code>@bus.on(\"event\")</code> реєструє хендлер", "tb6": "Публікація без підписників не викликає помилки",
+    "rules-note": "Всі правила перевіряються до будь-якого звернення до бази даних.",
+    "rule-customer": "Клієнт", "rule-product": "Товар", "rule-order": "Замовлення",
+    "rule-c1": "Email повинен бути <strong>унікальним</strong> в системі",
+    "rule-p1": "SKU повинен бути <strong>унікальним</strong> в системі",
+    "rule-p2": "Ціна повинна бути <strong>строго позитивною</strong>",
+    "rule-o1": "Не можна створити замовлення <strong>без існуючого клієнта</strong>",
+    "rule-o2": "Замовлення повинно містити <strong>хоча б один товар</strong>",
+    "rule-o3": "Кількість кожного товару в замовленні — <strong>позитивне ціле число</strong>",
+    "rule-o4": "Всі <code>product_id</code> в позиціях замовлення повинні <strong>існувати в БД</strong>",
+    "rule-o5": "Сума замовлення <strong>розраховується автоматично</strong> і не приймається від клієнта",
+    "i18n-how": "Для отримання відповіді потрібною мовою передавайте заголовок <code>Accept-Language</code>:",
+    "i18n-fallback": "Українська з fallback на англійську",
+    "i18n-add": "Додавання нової мови — достатньо додати словник у <code>app/i18n/translator.py</code> та включити код локалі в <code>SUPPORTED_LOCALES</code>.",
+  },
+  ru: {
+    "toc-title": "Содержание",
+    "toc-features": "✨ Возможности",
+    "toc-stack": "🛠 Стек",
+    "toc-arch": "🏛 Архитектура",
+    "toc-struct": "📁 Структура",
+    "toc-start": "🚀 Быстрый старт",
+    "toc-config": "⚙️ Конфигурация",
+    "toc-api": "📡 API Reference",
+    "toc-tests": "🧪 Тесты",
+    "toc-rules": "🔒 Бизнес-правила",
+    "toc-i18n": "🌍 Локализация",
+    "hero-desc": "Модуль обработки заказов на базе <strong>FastAPI + PostgreSQL + SQLAlchemy + Pydantic</strong>.<br>Реализует полный жизненный цикл заказа: от создания клиента и товара до оформления заказа с автоматическим расчётом суммы.",
+    "feat-c-title": "Создание клиента",
+    "feat-c-desc": "Регистрация с проверкой уникальности email",
+    "feat-p-title": "Создание товара",
+    "feat-p-desc": "Добавление товара с уникальным SKU и ценой",
+    "feat-o-title": "Создание заказа",
+    "feat-o-desc": "Оформление заказа с автоматическим расчётом суммы",
+    "feat-l-title": "Список заказов",
+    "feat-l-desc": "Получение всех заказов по ID клиента",
+    "feat-t-title": "Автоматический расчёт",
+    "feat-t-desc": "Сумма = Σ (unit_price × quantity) по всем позициям",
+    "feat-e-desc": "Публикация доменных событий при каждом создании сущности",
+    "th-component": "Компонент", "th-tech": "Технология", "th-version": "Версия",
+    "stack-fw": "Web-фреймворк", "stack-db": "База данных", "stack-drv": "Async-драйвер PG",
+    "stack-drv2": "Async-драйвер SQLite", "stack-val": "Валидация", "stack-cfg": "Конфигурация",
+    "stack-mig": "Миграции", "stack-test": "Тесты", "stack-http": "HTTP-клиент для тестов",
+    "arch-layers": "Многослойная архитектура",
+    "arch-api-comment": "маршруты, locale dependency, обработчики ошибок",
+    "arch-svc-comment": "оркестрация use-case, rules + repo + event_bus",
+    "arch-repo-comment": "чистый доступ к БД, без бизнес-логики",
+    "eventbus-desc": "Реализована <strong>in-process async Event Bus</strong> (<code>app/events/bus.py</code>) на базе <code>asyncio.Task</code>.",
+    "eb-1": "<code>publish()</code> — fire-and-forget: планирует каждый обработчик как отдельный <code>asyncio.Task</code>",
+    "eb-2": "Издатель <strong>не блокируется</strong> и не ждёт завершения обработчиков",
+    "eb-3": "Падение одного подписчика <strong>изолировано</strong> — другие обработчики продолжают работу",
+    "eb-4": "Поддерживаются как <code>async def</code>, так и обычные <code>def</code> хэндлеры",
+    "eb-5": "Декоратор <code>@bus.on(\"event.type\")</code> для удобной регистрации",
+    "code-publish": "Публикация события в сервисе", "code-subscribe": "Подписка через декоратор",
+    "th-event": "Событие", "th-trigger": "Триггер",
+    "ev-c": "Создание нового клиента", "ev-p": "Создание нового товара", "ev-o": "Оформление нового заказа",
+    "rules-title": "Выделенный Rules Service",
+    "rules-desc": "Бизнес-правила вынесены в <strong>отдельный stateless-слой</strong> (<code>app/rules/order_rules.py</code>).",
+    "rules-1": "Правила меняются <strong>независимо</strong> от логики персистентности",
+    "rules-2": "Легко тестировать как чистые функции — без БД, без HTTP",
+    "rules-3": "Сервисы вызывают <code>Rules</code> до любой мутации данных",
+    "code-rules": "В OrderService — одна точка входа для всех правил",
+    "i18n-resp-title": "Локализация ответов",
+    "i18n-resp-desc": "Все сообщения API (успех и ошибки) возвращаются на языке клиента.",
+    "i18n-1": "FastAPI-зависимость <code>get_locale</code> разбирает заголовок <code>Accept-Language</code>",
+    "i18n-2": "Выбирается лучшее совпадение из поддерживаемых локалей (<code>en</code>, <code>uk</code>, <code>ru</code>)",
+    "i18n-3": "Функция <code>translate(key, locale, **context)</code> подставляет переменные в шаблон",
+    "i18n-4": "При неизвестной локали — fallback на <code>default_locale</code> (по умолчанию <code>en</code>)",
+    "total-title": "Автоматический расчёт суммы",
+    "total-desc": "Метод <code>Order.recalculate_total()</code> вычисляет сумму на уровне доменной модели. <code>unit_price</code> <strong>снапшотится</strong> из <code>Product.price</code> в момент создания заказа.",
+    "envelope-title": "Единый конверт ответа",
+    "code-success": "Успех", "code-error": "Ошибка",
+    "s-main": "Фабрика приложения, lifespan, регистрация хэндлеров",
+    "s-config": "Настройки через pydantic BaseSettings (.env)",
+    "s-exc": "Иерархия AppError → NotFoundError, BusinessRuleViolationError",
+    "s-session": "Async engine, AsyncSession, get_session dependency",
+    "s-i18n": "Каталоги EN/UK/RU, функция translate()",
+    "s-types": "Константы: CustomerEvents, ProductEvents, OrderEvents",
+    "s-handlers": "Подписчики событий",
+    "step1-title": "Клонирование проекта", "step2-title": "Создание виртуального окружения",
+    "step3-title": "Установка зависимостей", "step4-title": "Создание файла настроек",
+    "step5a-title": "Запуск с SQLite (для разработки)", "step5b-title": "Или запуск с PostgreSQL",
+    "note-title": "После запуска:", "note-swagger": " Swagger UI → ",
+    "demo-link": "👉 <a href='https://htmlpreview.github.io/?https://raw.githubusercontent.com/SergeyKazanskiy/Test_OrderProcessing/main/test.html' target='_blank'>Открыть демонстрационную страницу</a>",
+    "th-var": "Переменная", "th-default": "По умолчанию", "th-desc": "Описание",
+    "cfg-db": "URL подключения к БД", "cfg-env": "Окружение (development / production)",
+    "cfg-locale": "Язык ответов по умолчанию", "cfg-locales": "Список поддерживаемых локалей",
+    "cfg-pg-example": "Пример для PostgreSQL:",
+    "api-customers": "Клиенты", "api-products": "Товары", "api-orders": "Заказы",
+    "api-create-customer": "Создать клиента", "api-create-product": "Создать товар",
+    "api-create-order": "Создать заказ", "api-orders-by": "Заказы клиента",
+    "api-errors": "Коды ошибок", "th-situation": "Ситуация",
+    "err-400": "Ошибка валидации домена (например, отрицательная цена)",
+    "err-404": "Сущность не найдена",
+    "err-422": "Нарушение бизнес-правила или ошибка схемы",
+    "test-run-all": "Запуск всех тестов", "test-run-cov": "Запуск с покрытием",
+    "test-run-groups": "Запуск отдельных групп",
+    "test-only-api": "Только интеграционные тесты API", "test-only-rules": "Только бизнес-правила",
+    "test-only-i18n": "Только i18n", "test-only-bus": "Только Event Bus",
+    "test-desc": "📊 Описание тестов",
+    "test-api-desc": "Интеграционные тесты (SQLite in-memory)",
+    "test-rules-desc": "Unit-тесты бизнес-правил", "test-bus-desc": "Unit-тесты EventBus",
+    "th-class": "Класс", "th-test": "Тест", "th-checks": "Что проверяет",
+    "tc1": "Успешное создание, структура ответа", "tc2": "422 при дублировании email", "tc3": "422 при невалидном email",
+    "tp1": "Создание товара, корректность цены", "tp2": "422 при дублировании SKU", "tp3": "404 при несуществующем ID",
+    "to1": "Заказ создан, total = qty × price", "to2": "Расчёт суммы по нескольким позициям",
+    "to3": "422 при несуществующем customer_id", "to4": "422 при пустом списке товаров",
+    "to5": "422 при несуществующем product_id", "to6": "Список заказов, корректное количество",
+    "to7": "404 при несуществующем клиенте",
+    "tl1": "Ответ содержит украинский текст", "tl2": "Ответ содержит русский текст",
+    "tl3": "Неизвестная локаль → fallback на EN",
+    "tr1": "Нет исключения если email свободен", "tr2": "<code>BusinessRuleViolationError</code> при дубле",
+    "tr3": "<code>BusinessRuleViolationError</code> при дубле SKU", "tr4": "<code>order_no_customer</code> при <code>None</code>",
+    "tr5": "<code>order_no_items</code> при пустом списке", "tr6": "<code>ValidationError</code> при quantity=0",
+    "tr7": "Корректный <code>id</code> в контексте ошибки", "tr8": "Вся цепочка правил без исключений",
+    "tb1": "Хэндлер получает событие с корректным payload", "tb2": "Обычная <code>def</code>-функция работает как хэндлер",
+    "tb3": "Падение одного хэндлера не мешает другому", "tb4": "После отписки хэндлер не вызывается",
+    "tb5": "<code>@bus.on(\"event\")</code> регистрирует хэндлер", "tb6": "Публикация без подписчиков не вызывает ошибки",
+    "rules-note": "Все правила проверяются до любого обращения к базе данных.",
+    "rule-customer": "Клиент", "rule-product": "Товар", "rule-order": "Заказ",
+    "rule-c1": "Email должен быть <strong>уникальным</strong> в системе",
+    "rule-p1": "SKU должен быть <strong>уникальным</strong> в системе",
+    "rule-p2": "Цена должна быть <strong>строго положительной</strong>",
+    "rule-o1": "Нельзя создать заказ <strong>без существующего клиента</strong>",
+    "rule-o2": "Заказ должен содержать <strong>хотя бы один товар</strong>",
+    "rule-o3": "Количество каждого товара в заказе — <strong>положительное целое число</strong>",
+    "rule-o4": "Все <code>product_id</code> в позициях заказа должны <strong>существовать в БД</strong>",
+    "rule-o5": "Сумма заказа <strong>рассчитывается автоматически</strong> и не принимается от клиента",
+    "i18n-how": "Для получения ответа на нужном языке передавайте заголовок <code>Accept-Language</code>:",
+    "i18n-fallback": "Украинский с fallback на английский",
+    "i18n-add": "Добавление нового языка — достаточно добавить словарь в <code>app/i18n/translator.py</code> и включить код локали в <code>SUPPORTED_LOCALES</code>.",
+  }
+};
+
+// ── Lang switcher ──────────────────────────────────────────────────────────
+function setLang(lang) {
+  const dict = T[lang];
+
+  // data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+
+  // data-lang visibility (block elements)
+  document.querySelectorAll('h2 [data-lang], p[data-lang], li[data-lang]').forEach(el => {
+    el.classList.toggle('visible', el.getAttribute('data-lang') === lang);
+  });
+
+  // data-lang inline spans
+  document.querySelectorAll('span[data-lang]').forEach(el => {
+    el.classList.toggle('visible', el.getAttribute('data-lang') === lang);
+  });
+
+  // TOC links (have IDs matching toc-*)
+  ['toc-title','toc-features','toc-stack','toc-arch','toc-struct','toc-start',
+   'toc-config','toc-api','toc-tests','toc-rules','toc-i18n'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && dict[id]) el.textContent = dict[id];
+  });
+
+  document.documentElement.lang = lang;
+  localStorage.setItem('readme-lang', lang);
+}
+
+// Init
+const saved = localStorage.getItem('readme-lang') || 'uk';
+document.getElementById('langSelect').value = saved;
+setLang(saved);
+</script>
+</body>
+</html>
