@@ -1,0 +1,104 @@
+/*
+  Design Tokens for UI Components
+  --------------------------------
+  
+  This file defines the core design tokens used across the UI components. 
+  These tokens include colors, spacing, typography, and other fundamental 
+  design values that ensure consistency and scalability in the design system.
+  
+  Each token is defined with a clear naming convention to indicate its purpose 
+  and usage context. The values are chosen to provide a harmonious and accessible 
+  design language for the application.
+  */
+
+// Spacing 
+$space-xs:  0.25rem; // 4px
+$space-sm:  0.5rem; // 8px
+$space-md:  1rem; // 16px
+$space-lg:  1.5rem; // 24px
+$space-xl:  2rem; // 32px
+
+// Radius
+$radius-xs:  2px;
+$radius-sm:  4px;
+$radius-md:  8px;
+$radius-lg:  12px;
+$radius-xl:  16px;
+
+// Borders
+$border-thin:  1px;
+$border-thick: 2px;
+
+// Text fonts
+$font-xs:  0.75rem;   // 12px
+$font-sm:  0.875rem;  // 14px
+$font-md:  1rem;      // 16px
+$font-lg:  1.25rem;   // 20px
+$font-xl:  1.875rem;  // 28px
+
+// Text weight
+$fw-normal:   400;
+$fw-medium:   500;
+$fw-semibold: 600;
+$fw-bold:     700;
+
+// Line heights
+$lh-sm: 1.25; // Для заголовков (компактно)
+$lh-md: 1.5;  // Стандарт для основного текста
+$lh-lg: 1.75; // Для длинных параграфов (максимальная читаемость)
+
+// Opacity levels
+$op-ghost:   0.05; // Едва заметные фоны (hover на светлом)
+$op-subtle:  0.15; // Подложки, границы
+$op-muted:   0.4;  // Второстепенный текст, иконки
+$op-disabled: 0.6;  // Заблокированные элементы (кнопки, инпуты)
+$op-solid:   0.9;  // Почти непрозрачный (hover на кнопках)
+
+// Shadows
+$shadow-color: rgba(0, 0, 0, 0.08);
+$shadow-sm:    0 2px 4px $shadow-color;
+$shadow-md:    0 4px 12px $shadow-color;
+$shadow-lg: 0 20px 60px oklch(0 0 0 / 0.15), 0 8px 20px oklch(0 0 0 / 0.08);
+
+// Status colors
+$status-success:      #52c41a;
+$status-error:        #ff4d4f;
+$status-warning:      #fa8c16;
+$status-ready:        #0284c7;
+$status-idle:         #d9d9d9;
+
+// Z-index System
+$z-index-modal: 1000;
+$z-index-modal-backdrop: 990;
+$z-index-modal-cover: 1050;
+
+// Modal Sizes
+$modal-width-md: 700px;
+$modal-height-md: 450px;
+
+
+// === CRYSTAL TOKENS ===
+// Цвета самоцветов (внутреннее свечение)
+$gem-ruby:    #e0115f; // Ярко-красный
+$gem-sapphire:#0f52ba; // Глубокий синий
+$gem-emerald: #50c878; // Ярко-зеленый
+
+$neon-ruby:    #00ffe0;  // циан — контраст к рубину
+$neon-sapphire: #ffae00; // янтарь — контраст к сапфиру
+$neon-emerald: #ff2bd6;  // маджента — контраст к изумруду
+
+// Геометрия кристалла
+$crystal-radius: $radius-sm; // Скругление углов кристалла
+$crystal-padding-y: $space-sm; // Вертикальный отступ внутри кристалла
+$crystal-padding-x: $space-lg; // Горизонтальный отступ внутри кристалла
+
+// Геометрия граней
+$facet-count: 8; // Количество граней (для clip-path)
+$crystal-elevation: 6px; // Высота тени для кристалла (для эффекта "парения")
+
+// Радужная палитра для пробегающего края
+$rainbow-gradient: conic-gradient( 
+  from 0deg,
+  #ff0040, #ff8a00, #ffd500, #4dff00,
+  #00ffd5, #0066ff, #a200ff, #ff00aa, #ff0040
+);

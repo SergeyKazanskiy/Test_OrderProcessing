@@ -12,7 +12,9 @@ from typing import List
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
+# Эндпоинты для управления заказами.
 
+# - POST /orders: создать новый заказ.
 @router.post(
     "",
     response_model=ApiResponse[OrderResponse],
@@ -31,7 +33,7 @@ async def create_order(
         data=OrderResponse.from_orm(order),
     )
 
-
+# - GET /orders/by-customer/{customer_id}: получить все заказы для клиента.
 @router.get(
     "/by-customer/{customer_id}",
     response_model=ApiResponse[List[OrderResponse]],
@@ -49,7 +51,7 @@ async def get_orders_by_customer(
         data=[OrderResponse.from_orm(o) for o in orders],
     )
 
-
+# - GET /orders/{order_id}: получить заказ по ID.
 @router.get(
     "/{order_id}",
     response_model=ApiResponse[OrderResponse],

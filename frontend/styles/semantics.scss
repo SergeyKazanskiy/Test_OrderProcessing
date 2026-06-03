@@ -1,0 +1,494 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/colors" as *;
+@use "@/styles/surfaces" as *;
+@use "@/styles/effects" as *;
+
+/*
+  Этот файл содержит стили для базовых HTML-элементов и общих компонентов, 
+  таких как кнопки, инпуты, заголовки и т.д. Он служит фундаментом для всего дизайна, 
+  обеспечивая единообразие и предсказуемость в использовании элементов интерфейса.
+
+  Здесь определены базовые стили для каждого элемента, а также модификаторы для различных 
+  состояний (например, hover, disabled) и вариантов (например, разные типы кнопок). 
+  Это позволяет легко создавать сложные интерфейсы, комбинируя эти базовые стили.
+*/
+
+// Кнопки
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  font-family: inherit;
+  font-weight: $fw-medium;
+  line-height: $lh-sm;
+  white-space: nowrap;
+  cursor: pointer;
+  border: $border-thin solid transparent;
+  border-radius: $radius-md;
+  transition: all var(--duration-normal) var(--ease-in-out-soft);
+  user-select: none;
+
+  // Состояние Disabled
+  &:disabled {
+    opacity: $op-disabled;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* --- ВАРИАНТЫ (Variants) --- */
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    box-shadow: $shadow-sm;
+
+    &:hover {
+      background-color: oklch(from var(--color-primary) calc(l - 0.08) c h);
+      box-shadow: $shadow-md;
+      //@include effect-press-burst($gem-ruby); 
+    }
+  }
+
+  &.secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
+    border-color: var(--color-border);
+
+    &:hover {
+      background-color: var(--color-muted);
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    &:hover {
+      background-color: oklch(from var(--color-primary) l c h / $op-ghost);
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    color: var(--color-foreground);
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      opacity: 1;
+      background-color: var(--color-primary);
+      color: var(--color-primary-foreground);
+    }
+  }
+
+  &.link {
+    background-color: transparent;
+    color: var(--color-primary);
+    padding: 0;
+    height: auto;
+    border: none;
+    border-radius: 0;
+
+    &:hover {
+      text-decoration: underline;
+      opacity: $op-solid;
+    }
+  }
+
+  /* --- РАЗМЕРЫ (Sizes) --- */
+  &.tiny { height: 1.2rem; font-size: $font-xs; padding: 0 $space-sm }
+  &.small { height: 2.2rem; padding: 0 $space-sm; font-size: $font-sm; gap: $space-xs }
+  &.middle { height: 2.5rem; padding: 0 $space-md; font-size: $font-md }
+  &.large { height: 3rem; padding: 0 $space-lg; font-size: $font-lg; border-radius: $radius-lg }
+
+  /* --- Поверхности --- */
+  &.jade-tile {@include jade-tile(1,15px)}
+}
+
+// Обертка для модальных окон
+dialog {
+  // Сброс браузерных стилей
+  border: none;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+  outline: none;
+  max-width: none;
+  max-height: none;
+
+  // Режим модального окна
+  &[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  // Стили для backdrop (полупрозрачный фон за модальным окном)
+  &::backdrop {
+    background: transparent; 
+  }
+
+  // Основной контент окна
+  .modal-content {
+    @include panel-glass;
+    border: $border-thin solid var(--color-primary);
+    border-radius: $radius-md;
+    box-shadow: $shadow-lg;
+    position: relative;
+    z-index: 1;
+    overflow: hidden; // Чтобы контент не вылезал за рамки при анимации
+    transition: width var(--duration-normal), height var(--duration-normal); // Плавная смена размеров, если меняется стейт
+  
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+   // Размеры
+  &.small { .modal-content { width: 400px; min-height: 200px;} }
+  &.middle { .modal-content { width: 600px; min-height: 400px;} }
+  &.large { .modal-content { width: 90vw; height: 80vh; max-width: 1200px;} }
+}
+
+// Headings 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: $fw-bold;
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+h1 { font-size: 2rem; } //  2rem = 32px
+h2 { font-size: $font-xl; } //  1.75rem = 28px
+h3 { font-size: $font-lg; } //  1.25rem = 20px
+h4 { font-size: $font-md; } // 1rem = 16px
+h5 { font-size: $font-sm; } // 0.875rem = 14px
+h6 { font-size: $font-xs; } // 0.75rem = 12px
+
+// Ссылки
+a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover { text-decoration: underline }
+
+::selection {
+  background: color-mix(in oklch, var(--color-primary), white 70%);
+  color: var(--color-foreground);
+}
+
+// Списки
+ul, ol { margin: 1.5rem 0 1.5rem 1.5rem }
+ul { list-style: disc }
+ol { list-style: decimal }
+li { margin-top: 0.25rem }
+
+hr { margin: 2rem 0; border-color: var(--color-border) }
+
+// Код
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--color-muted);
+  padding: 0.15rem 0.35rem;
+  border-radius: $radius-sm;
+}
+
+// Параграф
+p {
+  font-size: $font-md;
+  font-weight: $fw-normal;
+  line-height: $lh-md;
+  margin-bottom: 1rem;
+
+  small { font-size: $font-sm; color: var(--color-muted-foreground) }
+  strong, b { font-weight: 600 }
+
+  &.primary { color: var(--color-foreground) }
+  &.secondary { color: var(--color-secondary-foreground) }
+  &.accent { color: var(--color-accent-foreground) }
+
+  &.small {font-size: $font-sm}
+  &.miny {font-size: 13px}
+  &.tiny {font-size: $font-xs}
+}
+p:last-child { margin-bottom: 0 }
+
+// Ответ от сервера 
+output {
+  display: block;
+  font-size: $font-md;
+  font-weight: $fw-normal;
+  line-height: $lh-sm;
+
+  &[data-status="error"] { color: $status-error; }
+  &[data-status="success"] { color: $status-success; }
+
+  &.small { font-size: $font-sm; }
+  &.middle { font-size: $font-md; }
+  &.large { font-size: $font-lg; }
+}
+
+// Абстрактный шаблон для всех инпутов
+%input-base {
+  width: 100%;
+  background: transparent;
+  border: $border-thin solid var(--color-input);
+  border-radius: $radius-sm;
+  color: var(--color-foreground);
+  font-family: inherit;
+  transition: var(--duration-fast) var(--ease-in-out-soft);
+  outline: none;
+
+  &:focus {
+    border-color: $status-idle;
+    box-shadow: 0 0 0 1px rgba($status-idle, 0.2);
+  }
+
+  &:disabled {
+    opacity: $op-disabled;
+    cursor: not-allowed;
+    background-color: oklch(from var(--color-border) l c h / 0.1);
+  }
+
+  &[data-status="error"] {
+    color: $status-error;
+    border-color: $status-error;
+    &:focus {
+      box-shadow: 0 0 0 2px rgba($status-error, 0.2);
+    }
+  }
+
+  &::placeholder {
+    color: oklch(from var(--color-foreground) l c h / 0.4);
+    font-weight: $fw-normal;
+  }
+}
+
+// Обычный текстовый инпут
+input:not([type="checkbox"]):not([type="radio"]) {
+  @extend %input-base;
+  padding: 8px 12px;
+  font-size: $font-sm;
+
+  // Модификаторы иконок
+  &.--with-icon-left { padding-left: 32px; }
+  &.--with-icon-right { padding-right: 32px; }
+
+  // Авто-валидация
+  &:valid:not(:placeholder-shown):not([data-status="error"]) {
+    border-color: var(--color-primary);
+  }
+}
+
+// Поле для ввода кода (OTP)
+.code-input {
+  @extend %input-base;
+  font-size: $font-lg;
+  font-weight: $fw-bold;
+  text-align: center;
+  
+  // Уникальная логика размеров для OTP
+  width: 56px;
+  height: 56px;
+
+  &:focus {
+    background-image: linear-gradient(var(--color-primary), var(--color-primary));
+    background-repeat: no-repeat;
+    background-position: center bottom 4px;
+    background-size: 14px $border-thick;
+  }
+
+  &[data-status="error"] {
+    background-image: none;
+    background-color: rgba($status-error, 0.1);
+    border-color: $status-error;
+  }
+}
+
+// Обертка для группировки полей ввода
+fieldset {
+  border: none; // Сбрасываем дефолтную рамку fieldset
+  
+  legend {
+    color: var(--color-foreground);
+    font-size: $font-md;
+    font-weight: $fw-bold;
+    margin-bottom: $space-md;
+  }
+}
+
+label {
+  display: block;
+  font-size: $font-sm;
+  color: var(--color-primary);
+  margin-bottom: $space-xs;
+  cursor: pointer;
+  user-select: none;
+
+  .required-asterisk {
+    color: $status-error;
+    margin-left: 4px;
+  }
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  .field-label {
+    font-size: $font-sm;
+    color: var(--color-primary);
+
+    .required-asterisk {
+      color: $status-error;
+      margin-left: 4px;
+    }
+  }
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  stroke: currentColor;
+  fill: none;
+
+  &[data-status="idle"]    { color: $status-idle; }
+  &[data-status="ready"]   { color: rgba($status-ready, 0.25); }
+  &[data-status="error"]   { color: rgba($status-error, 0.25); }
+  &[data-status="success"] { color: $status-success; }
+}
+
+select {
+  background-color: transparent;
+  border-style: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  font-size: $font-sm;
+  font-weight: $fw-medium;
+  color: var(--color-foreground);
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  option {
+    background-color: var(--color-background); // Чтобы выпадающий список был читаемым
+    color: var(--color-foreground);
+  }
+}
+
+nav {
+  @include panel-glass;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rem 0rem;
+  border-radius: 9999px; /* Скругленный навбар */
+  top: 0.5rem;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0.5rem;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background: oklch(from var(--color-background) l c h / 0.2);
+    }
+    
+    &--active {
+      background: transparent;
+      box-shadow: none;
+
+      text-decoration: underline;
+      text-decoration-color: var(--color-muted-foreground);
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+  }
+
+  select {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-weight: 500;
+  }
+
+  .divider {
+    width: 1px;
+    height: 1.5rem;
+    background: oklch(from var(--color-border) l c h / 0.3);
+  }
+}
+
+aside {
+  @include panel-glass;
+}
+
+
+/* --- КРИСТАЛЛЬНЫЕ КНОПКИ --- */
+.crystal-button {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 32px;
+  font-weight: 600; letter-spacing: 0.04em;
+  color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  border: none; cursor: pointer;
+  transition: filter 200ms ease, transform 120ms ease;
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    filter: grayscale(1) brightness(0.6);
+    cursor: not-allowed;
+  }
+
+  &.ruby     {  @include surface-crystal($gem-ruby); //@include effect-gem-glow($gem-ruby);
+                &:not(:disabled) { @include effect-gem-glow($gem-ruby); }
+                &:hover:not(:disabled) { @include effect-gem-blaze; }
+                &.is-pressed   { @include effect-press-burst($neon-sapphire); }
+                &.is-flashing  { @include effect-neon-flash($neon-sapphire); }
+             }
+
+  &.sapphire { @include surface-crystal($gem-sapphire); 
+               &:not(:disabled) { @include effect-gem-glow($gem-sapphire); }
+               &:hover:not(:disabled) { @include effect-gem-blaze; }
+               &.is-pressed   { @include effect-press-burst($gem-sapphire); }
+               &.is-flashing  { @include effect-neon-flash($neon-sapphire); } }
+
+  &.emerald  { @include surface-crystal($gem-emerald);
+               &:not(:disabled) { @include effect-gem-glow($gem-emerald); }
+               &:hover:not(:disabled) { @include effect-gem-blaze; }
+               &.is-pressed   { @include effect-press-burst($gem-emerald); }
+               &.is-flashing  { @include effect-neon-flash($neon-emerald); } }
+}

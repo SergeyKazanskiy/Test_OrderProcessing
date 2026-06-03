@@ -1,0 +1,207 @@
+/*
+* Этот файл содержит общие анимации и переменные для них, которые можно использовать по всему проекту.
+* 1. Длительности и задержки
+* 2. Кривые ускорения (easing)
+* 3. Зарегистрированные анимации (на основе ключевых кадров)
+*/
+
+:root {
+  /* 1. DURATIONS DELAYS */
+  --duration-fast: 150ms; /* Длительность для быстрых анимаций, подходит для небольших эффектов, таких как наведение курсора или микровзаимодействия */
+  --duration-normal: 300ms; /* Длительность для стандартных анимаций, подходит для большинства случаев, таких как открытие модальных окон или переходы между страницами */
+  --duration-slow: 500ms; /* Длительность для более медленных анимаций, подходит для более заметных эффектов, таких как раскрытие аккордеона или сложные переходы */
+  --duration-press: 500ms; /* Длительность для нажатия, подходит для кнопок и интерактивных элементов */
+  --duration-rainbow: 1200ms; /* Длительность для радужного эффекта, подходит для более заметных анимаций */
+
+  --delay-100: 100ms; /* Задержка для анимаций, подходит для создания эффекта последовательности или для небольших задержек перед началом анимации */
+  --delay-200: 200ms; /* Задержка для анимаций, подходит для создания эффекта последовательности или для небольших задержек перед началом анимации */
+
+  /* 2. EASING CURVES  */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); /* Быстрое начало, плавное замедление */
+  --ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1); /* Мягкое начало и конец, подходит для большинства случаев */
+  --ease-out-grow-jump:cubic-bezier(0.34, 1.56, 0.64, 1); /* Быстрое начало, небольшая "пружина" в конце */
+  --ease-crystal: cubic-bezier(0.22, 1, 0.36, 1); /* Быстрое начало, плавное замедление с легким "пружинным" эффектом, идеально подходит для анимаций, связанных с кристаллами и блеском */
+
+  /* 3. REGISTERED ANIMATIONS */
+  --animate-fade-in: fade-in var(--duration-normal) var(--ease-out-expo); /* Постепенное появление */
+  --animate-slide-up: slide-in-bottom var(--duration-normal) var(--ease-out-expo); /* Выдвигается снизу */
+  --animate-drawer-right: slide-in-right var(--duration-slow) var(--ease-out-expo); /* Сдвигается вправо */
+  --animate-modal: scale-in var(--duration-normal) var(--ease-out-expo); /* Масштабирование */
+  --animate-accordion: accordion-down 200ms ease-out; /* Открытие аккордиона */
+
+  --animate-grow-from-word: grow-from-word var(--duration-normal) var(--ease-out-grow-jump); /* Рост от слова */ 
+  --animate-glass-pulse: glass-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* Пульсация для стеклянного эффекта */
+
+  /* Анимации для кристаллов и блеска */
+  --animate-crystal-blaze: crystal-blaze 1.6s ease-in-out infinite; /* Эффект пламени для кристаллов, подходит для создания динамичного и завораживающего эффекта */
+  --animate-crystal-burst: crystal-burst var(--duration-press) var(--ease-crystal) forwards; /* Взрыв кристалла, подходит для создания эффекта разрушения или появления кристалла */
+  --animate-crystal-rainbow: crystal-rainbow var(--duration-rainbow) linear forwards; /* Радужный эффект для кристаллов, подходит для создания яркого и красочного эффекта, который может использоваться для особых событий или активации мощных способностей */
+}
+
+  
+/* KEYFRAMES */
+
+/* Постепенное появление */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Затухание */
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Выдвигается снизу */
+@keyframes slide-in-bottom {
+  from { transform: translateY(20px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
+}
+
+/* Сдвигается вправо  */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Масштабирование */
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0 }
+  to { transform: scale(1); opacity: 1 }
+}
+
+/* Открытие аккордиона */
+@keyframes accordion-down {
+  from { height: 0; opacity: 0 }
+  to { height: var(--radix-accordion-content-height); opacity: 1 }
+}
+
+/* Лоадер крутится */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Кнопка трясется */
+@keyframes shake {
+  0%, 100%  { transform: translateX(0); }
+  20%       { transform: translateX(-4px); }
+  40%       { transform: translateX(4px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(3px); }
+}
+
+/* Полоска блеска */
+@keyframes gold-glint {
+  0% { left: -150%; }
+  14% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Переливание */
+@keyframes shimmer-animation {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Рост от слова */
+@keyframes grow-from-word {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Пульсация для стеклянного эффекта */
+@keyframes glass-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+/* Отключение анимаций */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --animate-fade-in: none;
+    --animate-slide-up: none;
+  }
+}
+
+/* === Анимация для кристаллов и блеска === */
+/* Полыхание изнутри (hover) */
+@keyframes crystal-blaze {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 12px 2px var(--gem-color),
+      0 0 8px 0 var(--gem-color);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 28px 6px var(--gem-color),
+      0 0 24px 4px var(--gem-color);
+    filter: brightness(1.25);
+  }
+}
+
+/* Blur-волна от центра (press) */
+@keyframes crystal-burst {
+  0%   { backdrop-filter: blur(0);  background-position: 50% 50%; }
+  60%  { backdrop-filter: blur(8px); }
+  100% { backdrop-filter: blur(0); }
+}
+
+/* Радужная обводка-пробежка */
+@keyframes crystal-rainbow {
+  0%   { --angle: 0deg;   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { --angle: 360deg; opacity: 0; }
+}
+
+/* Переменная для угла в анимации crystal-rainbow, которая позволяет вращать градиент вокруг элемента */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Второй вариант эффекта пламени для кристаллов, который создает более интенсивный и яркий эффект, идеально подходит для анимаций, связанных с кристаллами и блеском */
+/* Эффект пламени для кристаллов, который создает динамичный и завораживающий эффект, идеально подходит для анимаций, связанных с кристаллами и блеском */
+@keyframes crystal-blaze {
+  0%, 100% { box-shadow: inset 0 0 18px 2px var(--gem-color),
+                         inset 0 0 36px 6px color-mix(in oklab, var(--gem-color) 60%, transparent); }
+  50%      { box-shadow: inset 0 0 28px 6px var(--gem-color),
+                         inset 0 0 60px 14px color-mix(in oklab, var(--gem-color) 80%, transparent); }
+}
+
+@keyframes crystal-burst {
+  0%   { opacity: 0; transform: scale(0.2);  filter: blur(0px); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.6);  filter: blur(14px); }
+}
+
+/* Замена радуги — резкая неоновая вспышка контрастного цвета */
+@keyframes neon-flash {
+  0%   { opacity: 0;
+         box-shadow: 0 0 0 0 var(--neon-color),
+                     inset 0 0 0 0 var(--neon-color); }
+  15%  { opacity: 1;
+         box-shadow: 0 0 24px 6px var(--neon-color),
+                     0 0 60px 18px var(--neon-color),
+                     inset 0 0 30px 4px var(--neon-color); }
+  60%  { opacity: 0.8;
+         box-shadow: 0 0 18px 4px var(--neon-color),
+                     0 0 40px 10px color-mix(in oklab, var(--neon-color) 70%, transparent),
+                     inset 0 0 20px 2px var(--neon-color); }
+  100% { opacity: 0;
+         box-shadow: 0 0 0 0 transparent,
+                     inset 0 0 0 0 transparent; }
+}

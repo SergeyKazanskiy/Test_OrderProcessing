@@ -1,0 +1,351 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/animations" as *;
+
+/*
+  Этот файл содержит миксины для различных эффектов анимации и взаимодействия, 
+  таких как появление, наведение и активные состояния. Эти эффекты помогают сделать интерфейс более живым и отзывчивым, 
+  улучшая пользовательский опыт.
+
+  Миксины в этом файле можно применять к любым элементам, чтобы добавить им динамические эффекты без необходимости повторять код. 
+  Это способствует поддерживаемости и консистентности в дизайне.
+*/
+
+/* Появление увеличением */
+@mixin effect-zoom {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 
+    opacity var(--duration-normal) var(--ease-out-expo),
+    transform var(--duration-normal) var(--ease-out-expo),
+    display var(--duration-normal) allow-discrete,
+    overlay var(--duration-normal) allow-discrete;
+
+  &[open] { opacity: 1; transform: scale(1);}
+}
+
+/* Появление опусканием */
+@mixin effect-slide {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity var(--duration-normal) var(--ease-out-expo),
+    transform var(--duration-normal) var(--ease-out-expo),
+    display var(--duration-normal) allow-discrete,
+    overlay var(--duration-normal) allow-discrete;
+
+  &[open] { opacity: 1; transform: translateY(0);}
+}
+
+/* Появление опусканием */
+@mixin smooth-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0; // Начинаем с нуля
+  pointer-events: none; // Чтобы нельзя было нажать на невидимое сообщение
+  
+  transition: 
+    grid-template-rows var(--duration-normal) var(--ease-out-expo), 
+    opacity var(--duration-fast) ease-out,
+    margin-top var(--duration-normal) var(--ease-out-expo);
+
+  &:not(:empty) {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: $space-sm; // Используем токен из tokens.scss
+    pointer-events: auto;
+  }
+
+  & > * {
+    min-height: 0;
+    display: block;
+  }
+}
+
+// Кнопка притягивается
+@mixin hover-pull($scale: 0.96) {
+  transition: transform var(--duration-fast) var(--ease-in-out-soft);
+  will-change: transform;
+
+  &:hover {
+    transform: scale($scale);
+  }
+
+  &:active {
+    transform: scale(calc($scale - 0.02));
+    transition-duration: 50ms;
+  }
+}
+
+// Миксин для мягкого увеличения
+@mixin hover-scale($scale-value: 1.05) {
+  transition: transform 0.2s ease-in-out; // Плавность
+
+  &:hover {
+    transform: scale($scale-value); // Само увеличение
+  }
+
+  &:active {
+    transform: scale(0.98); // Эффект "нажатия" для живости
+  }
+}
+
+// Миксин для эффекта свечения
+@mixin hover-glow($color: rgba(0,0,0,0.1)) {
+  transition: box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 10px 20px $color;
+  }
+}
+
+// Эффект "переливания" (анимированный градиент)
+@mixin active-shimmer($color1: #7c3aed, $color2: #3b82f6) {
+  background-size: 200% 200%; // Увеличиваем фон, чтобы было куда двигать
+  transition: background-position 0.5s ease;
+
+  &:active {
+    background-image: linear-gradient(45deg, $color1, $color2, $color1);
+    animation: shimmer-animation 1s linear infinite;
+  }
+}
+
+// Эффекты появления
+// @mixin effect-zoom {
+//   opacity: 0;
+//   transform: scale(0.8);
+//   &[open] { opacity: 1; transform: scale(1); }
+// }
+
+// @mixin effect-slide {
+//   opacity: 0;
+//   transform: translateY(30px);
+//   &[open] { opacity: 1; transform: translateY(0); }
+// }
+
+
+// Эффекты для кристаллов
+// Внутреннее свечение (active)
+// @mixin effect-gem-glow {
+//   box-shadow:
+//     inset 0 0 14px 2px var(--gem-color),
+//     0 0 10px 0 oklch(from var(--gem-color) l c h / 0.5);
+// }
+
+// Полыхание (hover)
+// @mixin effect-gem-blaze {
+//   animation: var(--animate-crystal-blaze);
+// }
+
+// // Blur-волна от центра (press)
+// @mixin effect-press-burst {
+//   &::after {
+//     content: '';
+//     position: absolute; inset: 0;
+//     background: radial-gradient(circle at center,
+//       oklch(from var(--gem-color) calc(l + 0.2) c h / 0.6) 0%,
+//       transparent 70%);
+//     z-index: 2;
+//     pointer-events: none;
+//     opacity: 0;
+//   }
+//   &.is-pressed::after {
+//     animation: var(--animate-crystal-burst);
+//   }
+// }
+
+// Радужный пробег по краям (через 500ms после press)
+@mixin effect-rainbow-edge {
+  & > .rainbow-edge {
+    position: absolute; inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: $rainbow-gradient;
+    background-size: 300% 300%;
+    // -webkit-mask:
+    //   linear-gradient(#000 0 0) content-box,
+    //   linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  &.is-rainbow > .rainbow-edge {
+    animation: var(--animate-crystal-rainbow);
+  }
+}
+
+
+// Более сложный кристалл с дополнительными гранями и текстурой
+@mixin effect-gem-glow($color) {
+  --gem-color: #{$color};
+  box-shadow:
+    inset 0 0 18px 2px $color,
+  // inset 0 0 36px 6px rgba($color, 0.6);
+}
+
+// Полыхание (hover)
+@mixin effect-gem-blaze {
+  animation: crystal-blaze 1.6s ease-in-out infinite;
+}
+
+// Blur-волна от центра (press)
+@mixin effect-press-burst($color) {
+  &::before {
+    // burst overlay поверх граней
+    content: "";
+    position: absolute; inset: 0;
+    clip-path: inherit;
+    background: radial-gradient(circle at center,
+      rgba(255,255,255,0.9) 0%,
+      rgba($color, 0.5) 40%,
+      transparent 70%);
+    animation: crystal-burst 500ms ease-out forwards;
+    z-index: 5;
+    pointer-events: none;
+  }
+}
+
+// Неоновая вспышка по всей кнопке (включается через 500мс)
+@mixin effect-neon-flash($neon) {
+  --neon-color: #{$neon};
+  position: relative;
+
+  // отдельный слой, чтобы свечение не клипалось гранями
+  &::after {
+    content: "";
+    position: absolute; inset: 4px;
+    clip-path: inherit;
+    border-radius: inherit;
+    animation: neon-flash 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    z-index: 6;
+    pointer-events: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // .modal {
+  //   @apply fixed m-auto p-0 border-none bg-transparent overflow-visible;
+  //   transition: all 0.3s ease-out allow-discrete;
+  
+  //   // Модификаторы анимации
+  //   &--zoom { @include effect-zoom; }
+  //   &--slide { @include effect-slide; }
+  
+  //   &::backdrop {
+  //     @apply bg-black/40 backdrop-blur-[2px];
+  //     transition: opacity 0.3s allow-discrete;
+  //     opacity: 0;
+  //   }
+  //   &[open]::backdrop { opacity: 1; }
+  
+  //   // Базовый класс контейнера (вынесенный)
+  //   &__container {
+  //     @apply flex overflow-hidden rounded-2xl;
+  //     transition: inherit; // Чтобы анимация контейнера совпадала с родителем
+      
+  //     // Модификаторы подложки
+  //     &--glass { @include container-glass; }
+  //     &--dark { @include container-dark; }
+  //     &--golden {@include container-golden-pocket-watch;}
+  //   }
+  // }
+  
+  // .modal--watch {
+  //   perspective: 1000px; // Важно для 3D
+  
+  //   .modal__container {
+  //     @apply relative flex bg-white;
+  //     min-width: 700px;
+  //     height: 450px;
+  //     border-radius: 40px; // Скругляем под форму часов
+  //     box-shadow: 0 0 50px rgba(0,0,0,0.4), inset 0 0 10px gold;
+  //   }
+  
+  //   // Золотая крышка сверху
+  //   .modal__cover {
+  //     @include container-golden-pocket-watch; // Ваш миксин из прошлого шага
+  //     @apply absolute inset-0 z-50;
+  //     transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  //     transform-origin: left; // Петля «часов» слева
+  //     border-radius: 40px;
+  //   }
+  
+  //   // Когда диалог открыт, крышка откидывается
+  //   &[open] .modal__cover {
+  //     transform: rotateY(-110deg);
+  //     pointer-events: none; // Чтобы не мешала кликать
+  //   }
+  
+  //   .modal__sidebar {
+  //     @apply w-1/2 p-10 flex flex-col justify-center;
+  //     @include container-golden-pocket-watch; // Фон левой части тоже золотой
+  //     border-radius: 40px 0 0 40px;
+  
+  //     .hints {
+  //       @include silver-text;
+  //     }
+  //   }
+  
+  //   // Плавное проявление текста после открытия крышки
+  //   &[open] .hints {
+  //     opacity: 1;
+  //   }
+  
+  //   .modal__main {
+  //     @apply w-1/2 p-10 bg-white flex flex-col justify-center;
+  //     border-radius: 0 40px 40px 0;
+  //   }
+  // }
+  
+  
+  // .modal__engraving {
+  //   @include engraving-style;
+  //   text-align: center;
+  // }
+  
+  // .modal--watch {
+  //   // Базовое состояние (когда isOpen: true)
+  //   transition: 
+  //     opacity 0.8s ease-out, 
+  //     transform 0.8s ease-out,
+  //     visibility 0.8s allow-discrete;
+  
+  //   // Фаза закрытия после регистрации
+  //   &.modal--closing {
+  //     opacity: 0;
+  //     transform: scale(0.9) translateY(10px); // Медленно «оседает»
+  //     pointer-events: none;
+  
+  //     // Возвращаем крышку в исходное положение (закрываем)
+  //     .modal__cover {
+  //       transform: rotateY(0deg);
+  //       transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  //     }
+  
+  //     // Текст подсказок исчезает быстрее
+  //     .hints, .modal__engraving {
+  //       opacity: 0;
+  //       transition: opacity 0.5s ease-out;
+  //     }
+  //   }
+  // }
+

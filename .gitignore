@@ -23,3 +23,9 @@ __pycache__/
 
 # Alembic
 alembic/versions/*.py
+
+backend/.venv/
+backend/test.db
+backend/.env
+frontend/.next/
+frontend/node_modules/

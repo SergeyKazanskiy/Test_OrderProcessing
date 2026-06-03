@@ -1,0 +1,386 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/animations" as *;
+
+/*
+  Этот файл содержит миксины для различных поверхностей и текстур, таких как стекло, золото и серебро. 
+  Эти стили можно применять к любым элементам, чтобы придать им уникальный внешний вид и ощущение. 
+  Они включают в себя эффекты прозрачности, блеска и текстуры, которые помогают создать более богатый и интересный дизайн.
+*/
+
+// Универсальный бэкдроп
+@mixin backdrop-blur($bg-opacity: 0.5, $blur-amount: 4px) {
+  &::backdrop {
+    background: oklch(0 0 0 / $bg-opacity);
+    backdrop-filter: blur($blur-amount);
+  }
+}
+  
+// Стили контейнеров (подложки)
+@mixin container-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@mixin panel-glass {
+  background: oklch(from var(--color-background) l c h / 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(from var(--color-border) l c h / 0.3);
+  box-shadow: var(--shadow-md);
+}
+
+// Золотой градиента
+@mixin golden-surface {
+  background: linear-gradient(135deg, #d4af37, #f9f295, #b8860b);
+}
+
+// Вогнутое золота
+@mixin container-golden-pocket-watch {
+  background: radial-gradient(
+    ellipse at center, 
+    #ffd700 0%,    // Яркое золото в центре
+    #e6b800 50%,   // Насыщенный переход
+    #b8860b 100%   // Темное золото по краям (создает эффект вогнутости)
+  );
+  
+  position: relative;
+  overflow: hidden; // Чтобы блик не выходил за границы
+  border: 2px solid #daa520;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2); // Внутренняя тень усиливает эффект глубины
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%; // Начальная позиция блика
+    width: 200%;
+    height: 200%;
+    
+    // Светлая полоска под углом
+    background: linear-gradient(
+      115deg, 
+      transparent 0%, 
+      transparent 40%, 
+      rgba(255, 255, 255, 0.6) 50%, // Самый яркий свет
+      transparent 60%, 
+      transparent 100%
+    );
+    
+    // Анимация: полсекунды идет, 3 секунды ждет
+    animation: gold-glint 5.5s infinite ease-in-out;
+  }
+}
+
+// Гравировка по золоту
+@mixin engraving-style {
+  font-family: "serif"; // Подойдет что-то классическое
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  
+  // Цвет чуть темнее золотого фона
+  color: rgba(139, 101, 8, 0.7); 
+  
+  // Эффект "вдавленности"
+  text-shadow: 
+    -1px -1px 1px rgba(0, 0, 0, 0.3), // Тень внутри сверху
+    1px 1px 1px rgba(255, 255, 255, 0.3); // Блик снизу
+    
+  opacity: 0.8;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+// Серебрянный текст
+@mixin silver-text {
+  color: #c0c0c0;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5), -1px -1px 2px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 2s ease-in; // Медленное проявление
+}
+
+// Активный таб ???
+@mixin tab-active($bg: var(--color-primary), $fg: var(--color-primary-foreground)) {
+  background-color: $bg;
+  color: $fg;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Пример использования миксина для поповера */
+// [popover] {
+//   border: none;
+//   padding: 0;
+//   color: inherit;
+//   /* Теперь миксин ляжет чисто */
+//   @extend .panel-glass; 
+// }
+
+
+// Миксин для анимации блика кристалла
+// Огранённая стеклянная поверхность
+// @mixin surface-crystal {
+//   position: relative;
+//   isolation: isolate;
+//   background:
+//     linear-gradient(135deg,
+//       oklch(from var(--gem-color, #888) l c h / 0.35) 0%,
+//       oklch(from var(--gem-color, #888) calc(l + 0.15) c h / 0.55) 50%,
+//       oklch(from var(--gem-color, #888) l c h / 0.35) 100%);
+//   backdrop-filter: blur(6px);
+//   border: $border-thin solid oklch(from var(--gem-color, #888) calc(l + 0.2) c h / 0.6);
+//   // Огранка через clip-path (восьмиугольный «кристалл»)
+//   clip-path: polygon(
+//     8% 0, 92% 0, 100% 50%, 92% 100%,
+//     8% 100%, 0 50%
+//   );
+
+//   // Внутренние блики (фасеты)
+//   &::before {
+//     content: '';
+//     position: absolute; inset: 0;
+//     background:
+//       linear-gradient(115deg,
+//         transparent 40%,
+//         rgba(255,255,255,0.35) 50%,
+//         transparent 60%);
+//     mix-blend-mode: overlay;
+//     pointer-events: none;
+//     z-index: 1;
+//   }
+// }
+
+// Более сложный кристалл с дополнительными гранями и текстурой
+@mixin surface-crystal($color) {
+  position: relative;
+  isolation: isolate;
+
+  // Сложный clip-path с восемью гранями (вытянутый октагон с фасками)
+  // clip-path: polygon(
+  //   14% 0%, 86% 0%,
+  //   100% 28%, 100% 72%,
+  //   86% 100%, 14% 100%,
+  //   0% 72%, 0% 28%
+  // );
+
+  // Многослойный градиент: тело + фасеточные блики
+  background:
+    // верхний блик
+    linear-gradient(160deg,
+      rgba(255,255,255,0.55) 0%,
+      rgba(255,255,255,0.05) 22%,
+      transparent 45%
+    ),
+    // нижняя тень для объёма
+    linear-gradient(0deg,
+      rgba(0,0,0,0.45) 0%,
+      transparent 40%
+    ),
+    // диагональные грани
+    linear-gradient(115deg,
+      transparent 0%, transparent 30%,
+      rgba(255,255,255,0.18) 50%,
+      transparent 70%, transparent 100%
+    ),
+    linear-gradient(245deg,
+      transparent 0%, transparent 30%,
+      rgba(255,255,255,0.12) 50%,
+      transparent 70%, transparent 100%
+    ),
+    // тело кристалла
+    radial-gradient(ellipse at 35% 25%,
+      lighten($color, 20%) 0%,
+      $color 45%,
+      darken($color, 25%) 100%
+    );
+
+  // Рёбра/фаски
+  &::before {
+    content: "";
+    position: absolute; inset: 0;
+    clip-path: inherit;
+    background:
+      linear-gradient(90deg,
+        rgba(255,255,255,0.35) 0%,
+        transparent 14%, transparent 86%,
+        rgba(255,255,255,0.35) 100%
+      ),
+      linear-gradient(180deg,
+        rgba(255,255,255,0.25) 0%,
+        transparent 8%, transparent 92%,
+        rgba(0,0,0,0.4) 100%
+      );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Внутренние центральные грани (треугольники сходящиеся к центру)
+  &::after {
+    content: "";
+    position: absolute; inset: 0;
+    clip-path: inherit;
+    background:
+      conic-gradient(from 0deg at 50% 50%,
+        rgba(255,255,255,0.10) 0deg,
+        transparent 30deg,
+        rgba(0,0,0,0.18) 60deg,
+        transparent 90deg,
+        rgba(255,255,255,0.10) 120deg,
+        transparent 150deg,
+        rgba(0,0,0,0.18) 180deg,
+        transparent 210deg,
+        rgba(255,255,255,0.10) 240deg,
+        transparent 270deg,
+        rgba(0,0,0,0.18) 300deg,
+        transparent 330deg,
+        rgba(255,255,255,0.10) 360deg
+      );
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+
+// Объём/приподнятость через drop-shadow (работает с clip-path,
+// в отличие от обычного box-shadow)
+@mixin crystal-elevation($color) {
+  filter:
+    drop-shadow(0 2px 0 rgba(0,0,0,0.35))
+    drop-shadow(0 #{$crystal-elevation} 8px rgba(0,0,0,0.45))
+    drop-shadow(0 0 14px rgba($color, 0.35));
+}
+
+//Нефритовая плитка (для кнопок sidebar)
+@mixin jade-tile($glow-depth: 1, $glow-width: 15px) {
+  // 1. Динамический цвет смешивается с текстурой камня
+  // Вместо реальной картинки используем CSS-градиенты для имитации прожилок
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.1) 100%), // Объем/глянец
+    linear-gradient(45deg, transparent 45%, oklch(from var(--color-background) l c h / 0.2) 48%, oklch(from var(--color-background) l c h / 0.4) 50%, transparent 52%), // Прожилка камня
+    oklch(from var(--color-background) l c h / 0.6); // Основной динамический фон
+  
+  // Включаем режим смешивания, чтобы прожилки адаптировались под цвет
+  background-blend-mode: overlay, multiply, normal;
+
+  // 2. Эффект стекла и объема (как на картинке скругленные края и блики)
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(from var(--color-border) l c h / 0.3);
+  
+  // Внутреннее свечение (inset shadow) создает эффект выпуклой плитки
+  box-shadow: 
+    inset 0 1px 2px oklch(from var(--color-background) 0.9 c h / 0.4), 
+    var(--shadow-md);
+
+  // Плавный переход при смене темы/цвета
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+  // Эффект при наведении (опционально, делает камень глубже)
+  &:hover {
+    background-color: oklch(from var(--color-background) l c h / 0.7);
+    box-shadow: 
+      inset 0 1px 3px oklch(from var(--color-background) 0.9 c h / 0.5), 
+      var(--shadow-lg);
+  }
+
+  &.active {
+    // Подсвечиваем рамку в цвет неона
+    border-color: oklch(from var(--color-primary) 0.7 c h / 0.8);
+    
+    // Меняем тон самого камня, будто свет пробивается изнутри
+    background-color: oklch(from var(--color-primary) 0.5 c h / 0.5);
+
+    // Многослойный неон: внутреннее свечение + внешние слои разной ширины
+    box-shadow: 
+      // 1. Внутренний блик на ребрах плитки
+      inset 0 1px 3px oklch(from var(--color-primary) 0.9 c h / 0.6),
+      // 2. Яркое, плотное ядро неонового света у самого края
+      0 0 calc(#{$glow-width} * 0.2) oklch(from var(--color-primary) 0.6 c h / calc(0.8 * #{$glow-depth})),
+      // 3. Средний слой рассеивания (задает основной цвет)
+      0 0 $glow-width oklch(from var(--color-primary) 0.5 c h / calc(0.5 * #{$glow-depth})),
+      // 4. Глубокое, широкое и мягкое облако света вокруг кнопки
+      0 0 calc(#{$glow-width} * 2.5) oklch(from var(--color-primary) 0.4 c h / calc(0.2 * #{$glow-depth}));
+  }
+}
+
+
+// Для IkonButton ввиде камня с вдавленной иконкой
+@mixin basalt-tile {
+  // 1. БАЗОВАЯ ПОВЕРХНОСТЬ (ТЕМНАЯ ТЕМА)
+  // Делаем цвет темнее базового фона для эффекта вулканической плиты
+  background: 
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.2) 100%),
+    oklch(from var(--color-background) calc(l * 0.7) calc(c * 0.5) h);
+  
+  border: 1px solid oklch(from var(--color-background) calc(l * 0.5) c h / 0.4);
+  
+  box-shadow: 
+    inset 0 -1px 2px rgba(255,255,255,0.05),
+    inset 0 1px 2px rgba(0,0,0,0.4),
+    var(--shadow-md);
+    
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  svg path {
+    @include engraved-laser-glow(10px);
+  }
+
+  &.active, &--active {
+    background-color: oklch(from var(--color-background) calc(l * 0.6) calc(c * 0.4) h);
+    border-color: oklch(from var(--color-background) calc(l * 0.4) c h / 0.6);
+    box-shadow: 
+      inset 0 2px 4px rgba(0,0,0,0.6),
+      inset 0 -1px 1px rgba(255,255,255,0.02);
+  }
+
+  // 2. АДАПТАЦИЯ ПОД СВЕТЛУЮ ТЕМУ
+  // Здесь мы пишем селектор вашего html/body класса светлой темы
+  :global(.light) &,
+  [data-theme="light"] & {
+    // Для светлой темы делаем плитку не темнее, а СВЕТЛЕЕ базового фона (белый мрамор / известняк)
+    background: 
+      linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.03) 100%),
+      oklch(from var(--color-background) calc(l * 1.1) calc(c * 0.3) h); // Увеличиваем яркость (l * 1.1)
+    
+    // Мягкая серая граница вместо темной
+    border-color: oklch(from var(--color-background) calc(l * 0.8) c h / 0.3);
+    
+    // Тени в светлой теме должны быть мягче, без грубого черного цвета
+    box-shadow: 
+      inset 0 1px 2px rgba(255,255,255,0.8),
+      0 2px 5px rgba(0,0,0,0.06);
+
+    &.active, &--active {
+      // При нажатии в светлой теме кнопка становится чуть темнее (эффект тени от пальца)
+      background-color: oklch(from var(--color-background) calc(l * 0.92) calc(c * 0.3) h);
+      border-color: oklch(from var(--color-background) calc(l * 0.75) c h / 0.4);
+      box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.1),
+        inset 0 -1px 1px rgba(255,255,255,0.5);
+    }
+  }
+}
+
+// Универсальный эффект вдавленного лазера
+@mixin engraved-laser-glow($glow-width: 12px) {
+  // ВЫКЛЮЧЕНО (Темная тема — глубокая темная канавка)
+  stroke: oklch(from var(--color-background) calc(l * 0.4) calc(c * 0.3) h);
+  fill: none;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.8));
+
+  // ВЫКЛЮЧЕНО (Светлая тема — мягкая чистая канавка, тень падает внутрь)
+  :global(.light) &, [data-theme="light"] & {
+    stroke: oklch(from var(--color-background) calc(l * 0.7) calc(c * 0.4) h);
+    filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.15));
+  }
+
+  // ВКЛЮЧЕНО (Активное состояние — одинаково для обеих тем)
+  // Неон горит одинаково ярко, пробивая и светлую, и темную поверхность
+  &.active {
+    stroke: oklch(from var(--color-primary) 0.95 0.1 h); 
+    filter: 
+      drop-shadow(0px 0px 1px oklch(from var(--color-primary) 0.6 c h / 0.9))
+      drop-shadow(0px 0px calc(#{$glow-width} * 0.3) oklch(from var(--color-primary) 0.5 c h / 0.7))
+      drop-shadow(0px 0px $glow-width oklch(from var(--color-primary) 0.4 c h / 0.4));
+  }
+}
