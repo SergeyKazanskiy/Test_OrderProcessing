@@ -11,7 +11,9 @@ from app.services.product_service import ProductService
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
+# Эндпоинты для управления продуктами.
 
+# - POST /products: создать новый продукт.
 @router.post(
     "",
     response_model=ApiResponse[ProductResponse],
@@ -30,7 +32,7 @@ async def create_product(
         data=ProductResponse.from_orm(product),
     )
 
-
+# - GET /products/{product_id}: получить продукт по ID.
 @router.get(
     "/{product_id}",
     response_model=ApiResponse[ProductResponse],

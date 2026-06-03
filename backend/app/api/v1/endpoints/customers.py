@@ -12,6 +12,9 @@ from app.services.customer_service import CustomerService
 router = APIRouter(prefix="/customers", tags=["Customers"])
 
 
+# Эндпоинты для управления клиентами.
+
+# - POST /customers: создать нового клиента.
 @router.post(
     "",
     response_model=ApiResponse[CustomerResponse],
@@ -30,7 +33,7 @@ async def create_customer(
         data=CustomerResponse.from_orm(customer),
     )
 
-
+# - GET /customers/{customer_id}: получить клиента по ID.
 @router.get(
     "/{customer_id}",
     response_model=ApiResponse[CustomerResponse],

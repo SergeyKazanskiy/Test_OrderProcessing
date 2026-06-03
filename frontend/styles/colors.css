@@ -1,0 +1,72 @@
+/*
+*  --- СИСТЕМА ЦВЕТОВ ДЛЯ СВЕТЛОЙ И ТЕМНОЙ ТЕМЫ ---
+*  Базовые переменные (hue, lightness, chroma) задаются в :root для светлой темы и переопределяются в .dark для темной темы.
+*  Все остальные цвета вычисляются на основе этих переменных, что обеспечивает гармоничное сочетание и легкую поддержку.
+*/
+
+:root {
+  /* --- Базовые настройки (Светлая тема) --- */
+  --p-h: 250; 
+  --p-l: 0.6;
+  --p-c: 0.18;
+  --bg-l: 0.98;
+  --fg-l: 0.15;
+  --muted-l: 0.95;
+  --p-fg-l: clamp(0.1, calc((0.65 - var(--p-l)) * 1000), 0.98); 
+
+    /* --- ИКОНКИ --- */
+  --icon-active-c: var(--p-c); /* Активная иконка */
+  --icon-inactive-l: 0.45; /* Неактивная */
+  --icon-disabled-l: 0.75; /* Disabled */
+}
+
+.dark {
+  /* --- Инверсия (Темная тема) --- */
+  --p-h: 250;
+  --p-l: 0.55;
+  --p-c: 0.15;
+  --p-fg-l: 0.1; 
+  --bg-l: 0.12;
+  --fg-l: 0.95;
+  --muted-l: 0.2;
+
+    /* --- ИКОНКИ --- */
+  --icon-inactive-l: 0.65; /* Неактивная */
+  --icon-disabled-l: 0.35; /* Disabled */
+}
+
+@theme {
+  /* --- 1. ПОВЕРХНОСТИ (Backgrounds) --- */
+  --color-background: oklch(var(--bg-l) 0.01 var(--p-h)); /* Основной фон страницы (#ffffff) */
+  --color-surface: oklch(clamp(0,calc(var(--bg-l) + 0.02),1) 0.02 250); /* Карточки, модальные окна (#f8f9fc) */
+  --color-popover: oklch(var(--bg-l) 0.02 var(--p-h)); /* Выпадающие списки, тултипы (#fcfdfe) */
+
+  /* --- 2. ТЕКСТ (Foregrounds) --- */
+  --color-foreground: oklch(var(--fg-l) 0.02 var(--p-h)); /* Основной текст, заголовки (#0f172a) */
+  --color-muted-foreground: oklch(calc((var(--fg-l) + var(--bg-l)) / 2) 0.02 var(--p-h)); /* Подписи, неважный текст, плейсхолдеры (#64748b) */
+
+  /* --- 3. ГРАНИЦЫ И РАЗДЕЛИТЕЛИ --- */
+  --color-border: oklch(calc((var(--fg-l) + var(--bg-l) * 3) / 4) 0.01 var(--p-h)); /* Разделительные линии, рамки (#e2e8f0) */
+  --color-input: oklch(calc(var(--bg-l) - 0.05) 0.02 var(--p-h)); /* Поля ввода, чекбоксы (#f1f5f9) */
+
+  /* --- 4. ОСНОВНОЙ АКЦЕНТ (Primary) --- */
+  --color-primary: oklch(var(--p-l) var(--p-c) var(--p-h)); /* Главные кнопки, активные состояния (#2563eb) */
+  --color-primary-foreground: oklch(var(--p-fg-l) 0.01 var(--p-h)); /* Текст внутри Primary элементов (#ffffff) */
+
+  /* --- 5. ВТОРОСТЕПЕННЫЕ (Secondary/Muted) --- */
+  --color-secondary: oklch(calc(var(--bg-l) - 0.04) 0.04 var(--p-h)); /* Кнопки "Отмена", вторичные действия (#f1f5f9) */
+  --color-secondary-foreground: var(--color-foreground); /* Текст на вторичных кнопках (#0f172a) */
+  --color-muted: oklch(calc(var(--bg-l) - 0.04) 0.02 var(--p-h)); /* Фоны для неактивных вкладок, тегов (#f1f5f9) */
+
+  /* --- 6. СОСТОЯНИЯ (Accent) --- */
+  --color-accent: oklch(var(--p-l) 0.08 var(--p-h) / 0.15); /* Фон при наведении на пункты списка (Light Blue) */
+  --color-accent-foreground: var(--color-primary); /* Текст/Иконка при наведении на Accent (#2563eb) */
+
+  /* --- 7. ICONS --- */
+  --color-icon-active: oklch(var(--fg-l) var(--icon-active-c) var(--p-h));
+  --color-icon-inactive: oklch(var(--icon-inactive-l) 0.02 var(--p-h));
+  --color-icon-disabled: oklch(var(--icon-disabled-l) 0.01 var(--p-h));
+}
+
+
+

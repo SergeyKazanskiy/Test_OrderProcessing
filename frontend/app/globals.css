@@ -1,0 +1,23 @@
+/* 1. Сначала @use для SCSS файлов с переменными и миксинами */
+@use "../styles/tokens.scss" as *;
+@use "../styles/effects.scss" as *;
+@use "../styles/semantics.scss" as *;
+@use "../styles/surfaces.scss" as *;
+
+/* 2. Затем @import для обычных CSS/SCSS файлов с готовыми стилями */
+@import "tailwindcss";
+@import "../styles/colors.css";
+@import "../styles/animations.css";
+
+/* 3. Общие глобальные стили, которые применяются ко всему приложению. */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+

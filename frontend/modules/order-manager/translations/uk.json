@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "groups": {
+      "customers": "Клієнти",
+      "products": "Товари",
+      "orders": "Замовлення",
+      "rules": "Правила"
+    },
+    "tabs": {
+      "create-customer": "Створити клієнта",
+      "get-customer": "Отримати клієнта",
+      "create-product": "Створити товар",
+      "get-product": "Отримати товар",
+      "create-order": "Створити замовлення",
+      "get-order": "Отримати замовлення",
+      "orders-by-customer": "По клієнту",
+      "business-rules": "Бізнес-правила"
+    }
+  },
+  "fields": {
+    "name": "Ім'я",
+    "email": "Email",
+    "phone": "Телефон",
+    "sku": "Артикул",
+    "price": "Ціна",
+    "description": "Опис",
+    "customer_id": "ID клієнта",
+    "product_id": "ID товару",
+    "quantity": "Кількість",
+    "notes": "Нотатки",
+    "id": "ID"
+  },
+  "placeholders": {
+    "name": "Іван Петренко",
+    "email": "ivan@example.com",
+    "phone": "+380501234567",
+    "sku": "PROD-001",
+    "price": "999.99",
+    "description": "Опис товару",
+    "customer_id": "1",
+    "product_id": "1",
+    "quantity": "1",
+    "notes": "Доставка до 18:00",
+    "id": "1"
+  },
+  "hints": {
+    "phone": "Необов'язково",
+    "description": "Необов'язково",
+    "notes": "Необов'язково",
+    "sku": "Має бути унікальним",
+    "email": "Має бути унікальним",
+    "price": "Позитивне число, наприклад 19.99",
+    "items": "Мінімум 1 товар. Ціна береться з картки товару автоматично."
+  },
+  "actions": {
+    "send": "Надіслати запит",
+    "add_item": "+ Додати товар",
+    "copy": "Копіювати",
+    "clear_history": "Очистити"
+  },
+  "response": {
+    "title": "Відповідь",
+    "body": "Тіло",
+    "history": "Історія",
+    "empty": "Надішліть запит, щоб побачити відповідь",
+    "copied": "Скопійовано в буфер",
+    "no_history": "Запитів ще немає"
+  },
+  "settings": {
+    "base_url": "БАЗОВИЙ URL",
+    "locale": "Локаль",
+    "theme": "Тема"
+  },
+  "panels": {
+    "create-customer": {
+      "title": "Створити клієнта",
+      "description": "Зареєструвати нового клієнта",
+      "endpoint": "/customers"
+    },
+    "get-customer": {
+      "title": "Отримати клієнта",
+      "description": "Знайти клієнта за ID",
+      "endpoint": "/customers/{id}"
+    },
+    "create-product": {
+      "title": "Створити товар",
+      "description": "Додати новий товар до каталогу",
+      "endpoint": "/products"
+    },
+    "get-product": {
+      "title": "Отримати товар",
+      "description": "Знайти товар за ID",
+      "endpoint": "/products/{id}"
+    },
+    "create-order": {
+      "title": "Створити замовлення",
+      "description": "Оформити замовлення — сума розраховується автоматично",
+      "endpoint": "/orders"
+    },
+    "get-order": {
+      "title": "Отримати замовлення",
+      "description": "Знайти замовлення з усіма позиціями",
+      "endpoint": "/orders/{id}"
+    },
+    "orders-by-customer": {
+      "title": "Замовлення по клієнту",
+      "description": "Список усіх замовлень клієнта",
+      "endpoint": "/orders/by-customer/{id}"
+    },
+    "business-rules": {
+      "title": "Бізнес-правила",
+      "description": "Тест обмежень — запити нижче мають провалитися",
+      "endpoint": ""
+    }
+  },
+  "rules": {
+    "title": "Перевірка бізнес-правил",
+    "subtitle": "Кожен тест надсилає запит, який сервер повинен відхилити (очікується 422)",
+    "expected": "Очікується: 422",
+    "run": "Запустити тест",
+    "pass": "Правило спрацювало ✓",
+    "fail": "Правило НЕ спрацювало ✗",
+    "customer": {
+      "title": "Правила клієнта",
+      "r1": {
+        "label": "Дублікат email",
+        "description": "Спроба створити клієнта з вже зареєстрованим email",
+        "hint": "Введіть email існуючого клієнта"
+      },
+      "r2": {
+        "label": "Невалідний email",
+        "description": "Надіслати некоректну адресу email",
+        "hint": "наприклад: not-an-email"
+      }
+    },
+    "product": {
+      "title": "Правила товару",
+      "r1": {
+        "label": "Дублікат SKU",
+        "description": "Спроба створити товар з вже використаним SKU",
+        "hint": "Введіть SKU існуючого товару"
+      },
+      "r2": {
+        "label": "Нульова ціна",
+        "description": "Спроба створити товар з ціною = 0",
+        "hint": "Ціна має бути > 0"
+      }
+    },
+    "order": {
+      "title": "Правила замовлення",
+      "r1": {
+        "label": "Без клієнта",
+        "description": "Замовлення з неіснуючим customer_id",
+        "hint": "customer_id = 99999"
+      },
+      "r2": {
+        "label": "Порожні позиції",
+        "description": "Замовлення з порожнім списком товарів",
+        "hint": "items: [] — потрібен мінімум 1"
+      },
+      "r3": {
+        "label": "Товар не знайдено",
+        "description": "Замовлення з неіснуючим product_id",
+        "hint": "product_id = 99999"
+      },
+      "r4": {
+        "label": "Нульова кількість",
+        "description": "Позиція замовлення з кількістю = 0",
+        "hint": "quantity має бути > 0"
+      }
+    }
+  },
+  "errors": {
+    "name_required": "Ім'я обов'язкове",
+    "email_required": "Email обов'язковий",
+    "sku_required": "Артикул обов'язковий",
+    "price_required": "Ціна обов'язкова",
+    "customer_id_required": "ID клієнта обов'язковий",
+    "items_required": "Додайте хоча б один товар",
+    "item_fields_required": "Всі позиції потребують product_id та quantity > 0"
+  },
+  "api": {
+    "customer": {
+      "create": {
+        "loading": "Створення клієнта...",
+        "success": "Клієнта створено!"
+      },
+      "get": {
+        "loading": "Завантаження клієнта...",
+        "success": "Клієнта завантажено"
+      }
+    },
+    "product": {
+      "create": {
+        "loading": "Створення товару...",
+        "success": "Товар створено!"
+      },
+      "get": {
+        "loading": "Завантаження товару...",
+        "success": "Товар завантажено"
+      }
+    },
+    "order": {
+      "create": {
+        "loading": "Створення замовлення...",
+        "success": "Замовлення створено!"
+      },
+      "get": {
+        "loading": "Завантаження замовлення...",
+        "success": "Замовлення завантажено"
+      },
+      "byCustomer": {
+        "loading": "Завантаження замовлень...",
+        "success": "Замовлення завантажено"
+      }
+    }
+  }
+}

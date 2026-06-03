@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "groups": {
+      "customers": "Клиенты",
+      "products": "Товары",
+      "orders": "Заказы",
+      "rules": "Правила"
+    },
+    "tabs": {
+      "create-customer": "Создать клиента",
+      "get-customer": "Получить клиента",
+      "create-product": "Создать товар",
+      "get-product": "Получить товар",
+      "create-order": "Создать заказ",
+      "get-order": "Получить заказ",
+      "orders-by-customer": "По клиенту",
+      "business-rules": "Бизнес-правила"
+    }
+  },
+  "fields": {
+    "name": "Имя",
+    "email": "Email",
+    "phone": "Телефон",
+    "sku": "Артикул",
+    "price": "Цена",
+    "description": "Описание",
+    "customer_id": "ID клиента",
+    "product_id": "ID товара",
+    "quantity": "Количество",
+    "notes": "Примечания",
+    "id": "ID"
+  },
+  "placeholders": {
+    "name": "Иван Петров",
+    "email": "ivan@example.com",
+    "phone": "+79001234567",
+    "sku": "PROD-001",
+    "price": "999.99",
+    "description": "Описание товара",
+    "customer_id": "1",
+    "product_id": "1",
+    "quantity": "1",
+    "notes": "Доставка до 18:00",
+    "id": "1"
+  },
+  "hints": {
+    "phone": "Необязательно",
+    "description": "Необязательно",
+    "notes": "Необязательно",
+    "sku": "Должен быть уникальным",
+    "email": "Должен быть уникальным",
+    "price": "Положительное число, например 19.99",
+    "items": "Минимум 1 товар. Цена берётся из карточки товара автоматически."
+  },
+  "actions": {
+    "send": "Отправить запрос",
+    "add_item": "+ Добавить товар",
+    "copy": "Копировать",
+    "clear_history": "Очистить"
+  },
+  "response": {
+    "title": "Ответ",
+    "body": "Тело",
+    "history": "История",
+    "empty": "Отправьте запрос, чтобы увидеть ответ",
+    "copied": "Скопировано в буфер",
+    "no_history": "Запросов ещё не было"
+  },
+  "settings": {
+    "base_url": "БАЗОВЫЙ URL",
+    "locale": "Локаль",
+    "theme": "Тема"
+  },
+  "panels": {
+    "create-customer": {
+      "title": "Создать клиента",
+      "description": "Зарегистрировать нового клиента",
+      "endpoint": "/customers"
+    },
+    "get-customer": {
+      "title": "Получить клиента",
+      "description": "Найти клиента по ID",
+      "endpoint": "/customers/{id}"
+    },
+    "create-product": {
+      "title": "Создать товар",
+      "description": "Добавить новый товар в каталог",
+      "endpoint": "/products"
+    },
+    "get-product": {
+      "title": "Получить товар",
+      "description": "Найти товар по ID",
+      "endpoint": "/products/{id}"
+    },
+    "create-order": {
+      "title": "Создать заказ",
+      "description": "Оформить заказ — сумма рассчитывается автоматически",
+      "endpoint": "/orders"
+    },
+    "get-order": {
+      "title": "Получить заказ",
+      "description": "Найти заказ со всеми позициями",
+      "endpoint": "/orders/{id}"
+    },
+    "orders-by-customer": {
+      "title": "Заказы по клиенту",
+      "description": "Список всех заказов клиента",
+      "endpoint": "/orders/by-customer/{id}"
+    },
+    "business-rules": {
+      "title": "Бизнес-правила",
+      "description": "Тест ограничений — запросы ниже должны провалиться",
+      "endpoint": ""
+    }
+  },
+  "rules": {
+    "title": "Проверка бизнес-правил",
+    "subtitle": "Каждый тест отправляет запрос, который сервер должен отклонить (ожидается 422)",
+    "expected": "Ожидается: 422",
+    "run": "Запустить тест",
+    "pass": "Правило сработало ✓",
+    "fail": "Правило НЕ сработало ✗",
+    "customer": {
+      "title": "Правила клиента",
+      "r1": {
+        "label": "Дубликат email",
+        "description": "Создать клиента с уже зарегистрированным email",
+        "hint": "Введите email существующего клиента"
+      },
+      "r2": {
+        "label": "Невалидный email",
+        "description": "Отправить некорректный email-адрес",
+        "hint": "например: not-an-email"
+      }
+    },
+    "product": {
+      "title": "Правила товара",
+      "r1": {
+        "label": "Дубликат SKU",
+        "description": "Создать товар с уже используемым SKU",
+        "hint": "Введите SKU существующего товара"
+      },
+      "r2": {
+        "label": "Нулевая цена",
+        "description": "Создать товар с ценой = 0",
+        "hint": "Цена должна быть > 0"
+      }
+    },
+    "order": {
+      "title": "Правила заказа",
+      "r1": {
+        "label": "Без клиента",
+        "description": "Заказ с несуществующим customer_id",
+        "hint": "customer_id = 99999"
+      },
+      "r2": {
+        "label": "Пустые позиции",
+        "description": "Заказ с пустым списком товаров",
+        "hint": "items: [] — минимум 1"
+      },
+      "r3": {
+        "label": "Товар не найден",
+        "description": "Заказ с несуществующим product_id",
+        "hint": "product_id = 99999"
+      },
+      "r4": {
+        "label": "Нулевое количество",
+        "description": "Позиция заказа с количеством = 0",
+        "hint": "quantity должен быть > 0"
+      }
+    }
+  },
+  "errors": {
+    "name_required": "Имя обязательно",
+    "email_required": "Email обязателен",
+    "sku_required": "Артикул обязателен",
+    "price_required": "Цена обязательна",
+    "customer_id_required": "ID клиента обязателен",
+    "items_required": "Добавьте хотя бы один товар",
+    "item_fields_required": "Все позиции требуют product_id и quantity > 0"
+  },
+  "api": {
+    "customer": {
+      "create": {
+        "loading": "Создание клиента...",
+        "success": "Клиент создан!"
+      },
+      "get": {
+        "loading": "Загрузка клиента...",
+        "success": "Клиент загружен"
+      }
+    },
+    "product": {
+      "create": {
+        "loading": "Создание товара...",
+        "success": "Товар создан!"
+      },
+      "get": {
+        "loading": "Загрузка товара...",
+        "success": "Товар загружен"
+      }
+    },
+    "order": {
+      "create": {
+        "loading": "Создание заказа...",
+        "success": "Заказ создан!"
+      },
+      "get": {
+        "loading": "Загрузка заказа...",
+        "success": "Заказ загружен"
+      },
+      "byCustomer": {
+        "loading": "Загрузка заказов...",
+        "success": "Заказы загружены"
+      }
+    }
+  }
+}

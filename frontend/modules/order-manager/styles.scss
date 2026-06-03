@@ -1,0 +1,249 @@
+// ─── styles.scss — цвета, шрифты, анимации, компоненты ──────────────────────
+// Интегрирует систему цветов из colors.css (OKLCH-переменные)
+// Все токены берутся из var(--color-*), не хардкодятся
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+// ─── Шрифты ──────────────────────────────────────────────────────────────────
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  // Размеры
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  // Тени
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+
+  // Анимации
+  --duration-fast:   100ms;
+  --duration:        200ms;
+  --duration-slow:   350ms;
+  --ease:            cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// ─── Базовые стили ────────────────────────────────────────────────────────────
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  line-height: 1.6;
+}
+
+// Переключение тёмной темы через класс .dark на <html>
+html.dark {
+  color-scheme: dark;
+}
+
+// ─── Скроллбары ───────────────────────────────────────────────────────────────
+
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 99px;
+  &:hover { background: var(--color-muted-foreground); }
+}
+
+// ─── Кнопки — базовый плейсхолдер ────────────────────────────────────────────
+
+%btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease),
+    opacity var(--duration) var(--ease),
+    transform var(--duration-fast) var(--ease);
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+// ─── Размеры кнопок ───────────────────────────────────────────────────────────
+
+.tiny  { @extend %btn-base; padding: 2px 8px;    font-size: 11px; border-radius: var(--radius-sm); }
+.small { @extend %btn-base; padding: 6px 12px;   font-size: 12px; }
+.middle{ @extend %btn-base; padding: 9px 18px;   font-size: 13px; }
+.large { @extend %btn-base; padding: 12px 24px;  font-size: 14px; }
+
+// ─── Варианты кнопок ─────────────────────────────────────────────────────────
+
+// Primary — основное действие
+.primary {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 16px oklch(var(--p-l) var(--p-c) var(--p-h) / 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+// Secondary — вспомогательное действие
+.secondary {
+  background: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  border-color: var(--color-border);
+
+  &:hover:not(:disabled) {
+    background: var(--color-muted);
+    border-color: var(--color-muted-foreground);
+  }
+}
+
+// Outline — рамочная кнопка
+.outline {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent);
+  }
+}
+
+// Ghost — прозрачная
+.ghost {
+  background: transparent;
+  color: var(--color-muted-foreground);
+  border-color: transparent;
+  opacity: 0.8;
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent);
+    color: var(--color-accent-foreground);
+    opacity: 1;
+  }
+
+  &.active {
+    opacity: 1;
+    color: var(--color-accent-foreground);
+  }
+}
+
+// ─── Input — базовые стили ────────────────────────────────────────────────────
+
+%input-base {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: transparent;
+  color: var(--color-foreground);
+  border: 1px solid var(--color-input);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  transition:
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+
+  &::placeholder {
+    color: var(--color-muted-foreground);
+    opacity: 0.5;
+  }
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px oklch(var(--p-l) var(--p-c) var(--p-h) / 0.12);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+// ─── JSON-подсветка (JsonViewer) ─────────────────────────────────────────────
+
+.json-key  { color: oklch(0.65 0.15 250); }  // синий   — ключ
+.json-str  { color: oklch(0.65 0.14 145); }  // зелёный — строка
+.json-num  { color: oklch(0.70 0.15 60);  }  // жёлтый  — число
+.json-bool { color: oklch(0.65 0.16 310); }  // фиолет  — bool
+.json-null { color: oklch(0.55 0.01 250); }  // серый   — null
+
+// Тёмная тема: немного светлее
+html.dark {
+  .json-key  { color: oklch(0.72 0.15 250); }
+  .json-str  { color: oklch(0.75 0.14 145); }
+  .json-num  { color: oklch(0.80 0.15 60);  }
+  .json-bool { color: oklch(0.75 0.16 310); }
+  .json-null { color: oklch(0.55 0.01 250); }
+}
+
+// ─── Анимации ─────────────────────────────────────────────────────────────────
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+// Утилита — появление панели при смене вкладки
+.panel-enter {
+  animation: fadeIn var(--duration-slow) var(--ease) both;
+}
+
+// Утилита — появление алерта
+.alert-enter {
+  animation: slideInRight var(--duration) var(--ease) both;
+}
+
+// ─── Select ───────────────────────────────────────────────────────────────────
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px !important;
+}

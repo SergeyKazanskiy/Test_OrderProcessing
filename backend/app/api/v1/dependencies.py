@@ -5,6 +5,8 @@ from fastapi import Header
 from app.core.config import get_settings
 from typing import Optional
 
+
+# Разрешение локали из заголовка Accept-Language.
 async def get_locale(accept_language: Optional[str] = Header(default=None)) -> str:
     """
     Resolve the best matching locale from the Accept-Language header.

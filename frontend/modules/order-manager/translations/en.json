@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "groups": {
+      "customers": "Customers",
+      "products": "Products",
+      "orders": "Orders",
+      "rules": "Rules"
+    },
+    "tabs": {
+      "create-customer": "Create Customer",
+      "get-customer": "Get Customer",
+      "create-product": "Create Product",
+      "get-product": "Get Product",
+      "create-order": "Create Order",
+      "get-order": "Get Order",
+      "orders-by-customer": "By Customer",
+      "business-rules": "Business Rules"
+    }
+  },
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "sku": "SKU",
+    "price": "Price",
+    "description": "Description",
+    "customer_id": "Customer ID",
+    "product_id": "Product ID",
+    "quantity": "Quantity",
+    "notes": "Notes",
+    "id": "ID"
+  },
+  "placeholders": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+380501234567",
+    "sku": "PROD-001",
+    "price": "999.99",
+    "description": "Product description",
+    "customer_id": "1",
+    "product_id": "1",
+    "quantity": "1",
+    "notes": "Delivery before 18:00",
+    "id": "1"
+  },
+  "hints": {
+    "phone": "Optional",
+    "description": "Optional",
+    "notes": "Optional",
+    "sku": "Must be unique",
+    "email": "Must be unique",
+    "price": "Positive decimal, e.g. 19.99",
+    "items": "At least 1 item. Price is snapshotted from the product automatically."
+  },
+  "actions": {
+    "send": "Send Request",
+    "add_item": "+ Add Item",
+    "copy": "Copy",
+    "clear_history": "Clear"
+  },
+  "response": {
+    "title": "Response",
+    "body": "Body",
+    "history": "History",
+    "empty": "Send a request to see the response",
+    "copied": "Copied to clipboard",
+    "no_history": "No requests yet"
+  },
+  "settings": {
+    "base_url": "BASE URL",
+    "locale": "Locale",
+    "theme": "Theme"
+  },
+  "panels": {
+    "create-customer": {
+      "title": "Create Customer",
+      "description": "Register a new customer",
+      "endpoint": "/customers"
+    },
+    "get-customer": {
+      "title": "Get Customer",
+      "description": "Retrieve a customer by ID",
+      "endpoint": "/customers/{id}"
+    },
+    "create-product": {
+      "title": "Create Product",
+      "description": "Add a new product to the catalog",
+      "endpoint": "/products"
+    },
+    "get-product": {
+      "title": "Get Product",
+      "description": "Retrieve a product by ID",
+      "endpoint": "/products/{id}"
+    },
+    "create-order": {
+      "title": "Create Order",
+      "description": "Place an order — total calculated automatically",
+      "endpoint": "/orders"
+    },
+    "get-order": {
+      "title": "Get Order",
+      "description": "Retrieve an order with all its items",
+      "endpoint": "/orders/{id}"
+    },
+    "orders-by-customer": {
+      "title": "Orders by Customer",
+      "description": "List all orders for a specific customer",
+      "endpoint": "/orders/by-customer/{id}"
+    },
+    "business-rules": {
+      "title": "Business Rules",
+      "description": "Test each constraint — requests below should fail",
+      "endpoint": ""
+    }
+  },
+  "rules": {
+    "title": "Business Rules Checker",
+    "subtitle": "Each test sends a request that must be rejected (expected 422)",
+    "expected": "Expected: 422",
+    "run": "Run Test",
+    "pass": "Rule enforced ✓",
+    "fail": "Rule NOT enforced ✗",
+    "customer": {
+      "title": "Customer Rules",
+      "r1": {
+        "label": "Duplicate email",
+        "description": "Create a customer with an already registered email",
+        "hint": "Enter email of an existing customer"
+      },
+      "r2": {
+        "label": "Invalid email",
+        "description": "Send a malformed email address",
+        "hint": "e.g. not-an-email"
+      }
+    },
+    "product": {
+      "title": "Product Rules",
+      "r1": {
+        "label": "Duplicate SKU",
+        "description": "Create a product with an already used SKU",
+        "hint": "Enter SKU of an existing product"
+      },
+      "r2": {
+        "label": "Zero price",
+        "description": "Create a product with price = 0",
+        "hint": "Price must be > 0"
+      }
+    },
+    "order": {
+      "title": "Order Rules",
+      "r1": {
+        "label": "No customer",
+        "description": "Order with a non-existent customer_id",
+        "hint": "customer_id = 99999"
+      },
+      "r2": {
+        "label": "Empty items",
+        "description": "Order with an empty items list",
+        "hint": "items: [] — min 1 required"
+      },
+      "r3": {
+        "label": "Product not found",
+        "description": "Order referencing a non-existent product_id",
+        "hint": "product_id = 99999"
+      },
+      "r4": {
+        "label": "Zero quantity",
+        "description": "Order item with quantity = 0",
+        "hint": "quantity must be > 0"
+      }
+    }
+  },
+  "errors": {
+    "name_required": "Name is required",
+    "email_required": "Email is required",
+    "sku_required": "SKU is required",
+    "price_required": "Price is required",
+    "customer_id_required": "Customer ID is required",
+    "items_required": "Add at least one item",
+    "item_fields_required": "All items need product_id and quantity > 0"
+  },
+  "api": {
+    "customer": {
+      "create": {
+        "loading": "Creating customer...",
+        "success": "Customer created!"
+      },
+      "get": {
+        "loading": "Fetching customer...",
+        "success": "Customer loaded"
+      }
+    },
+    "product": {
+      "create": {
+        "loading": "Creating product...",
+        "success": "Product created!"
+      },
+      "get": {
+        "loading": "Fetching product...",
+        "success": "Product loaded"
+      }
+    },
+    "order": {
+      "create": {
+        "loading": "Creating order...",
+        "success": "Order created!"
+      },
+      "get": {
+        "loading": "Fetching order...",
+        "success": "Order loaded"
+      },
+      "byCustomer": {
+        "loading": "Fetching orders...",
+        "success": "Orders loaded"
+      }
+    }
+  }
+}
