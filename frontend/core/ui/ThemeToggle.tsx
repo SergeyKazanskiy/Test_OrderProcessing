@@ -84,7 +84,7 @@ export function ThemeToggle() {
         onClick={handleThemeChange}
         className="px-2 py-1 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-500 dark:bg-gray-800 transition-all"
       >
-        {theme === 'dark' ? '🌙' : `☀️`}
+        {theme === 'dark' ? `☀️` : '🌙' }
       </button>
 
       {/* Изменено позиционирование: заменено `right-0` на `left-0` */}
